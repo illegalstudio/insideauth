@@ -1,4 +1,7 @@
 # Laravel InsideAuth
+
+_THIS REPOSITORY IS UNDER ACTIVE DEVELOPMENT AND IS NOT READY FOR PRODUCTION USE._
+
 Laravel InsideAuth is a seamless side authentication solution for Laravel packages. It provides an easy and independent authentication mechanism, allowing developers to focus on building core features of their packages or applications without worrying about managing separate authentication systems.
 
 Features
