@@ -26,7 +26,8 @@
         "spatie/laravel-ignition": "^1.0",
         "phpunit/phpunit": "^9.6",
         "pestphp/pest-plugin-mock": "^1.0",
-        "orchestra/testbench": "^7.22"
+        "orchestra/testbench": "^7.22",
+        "illegal/laravel-utils": "*"
     },
     "autoload": {
         "psr-4": {
@@ -41,7 +42,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Illegal\\InsideAuth\\ServiceProvider"
+                "Illegal\\InsideAuth\\Providers\\EventServiceProvider",
+                "Illegal\\InsideAuth\\Providers\\ServiceProvider"
             ]
         }
     },
