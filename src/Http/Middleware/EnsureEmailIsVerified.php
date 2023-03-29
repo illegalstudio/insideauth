@@ -3,7 +3,7 @@
 namespace Illegal\InsideAuth\Http\Middleware;
 
 use Closure;
-use Illegal\InsideAuth\Authenticator;
+use Illegal\InsideAuth\InsideAuth;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,13 +18,10 @@ class EnsureEmailIsVerified
      */
     public function handle(Request $request, Closure $next): Response|RedirectResponse|null
     {
-        /** @var Authenticator $authenticator */
-        $authenticator = $request->attributes->get('authenticator');
-
         /**
          * Only check if email verification is enabled
          */
-        if (config('inside_auth.functionalities.email_verification')) {
+        if(InsideAuth::current()->isEmailVerificationEnabled()) {
             if (!$request->user() ||
                 ( $request->user() instanceof MustVerifyEmail &&
                     !$request->user()->hasVerifiedEmail() )) {
@@ -33,7 +30,7 @@ class EnsureEmailIsVerified
                     abort(403, 'Your email address is not verified.');
                 }
 
-                return Redirect::guest(URL::route($authenticator->route_verification_notice));
+                return Redirect::guest(URL::route(InsideAuth::current()->route_verification_notice));
             }
         }
 
