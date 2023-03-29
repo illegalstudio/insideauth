@@ -20,6 +20,13 @@ use Illegal\InsideAuth\Contracts\RegistratorInterface;
 final class Registrator
 {
     /**
+     * This variable carries the authenticator for the current request.
+     * It will be populate by the InjectIntoApplication middleware
+     * @see \Illegal\InsideAuth\Http\Middleware\InjectIntoApplication
+     */
+    private Authenticator $current;
+
+    /**
      * The registrators list, used to register the routes, the middlewares, the config, etc.
      */
     private array $registrators = [
@@ -76,5 +83,22 @@ final class Registrator
     public function getAuthenticator(string $name): Authenticator
     {
         return $this->authenticators[$name] ?? abort(500, 'Authenticator not found');
+    }
+
+    /**
+     * Set the current authenticator instance
+     */
+    public function withCurrent(Authenticator $authenticator): self
+    {
+        $this->current = $authenticator;
+        return $this;
+    }
+
+    /**
+     * Returns the current authenticator instance
+     */
+    public function current(): Authenticator
+    {
+        return $this->current;
     }
 }

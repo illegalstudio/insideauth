@@ -4,6 +4,7 @@ namespace Illegal\InsideAuth\Http\Controllers;
 
 use Illegal\InsideAuth\Authenticator;
 use Illegal\InsideAuth\Events\Registered;
+use Illegal\InsideAuth\InsideAuth;
 use Illegal\InsideAuth\Models\User;
 use Illegal\Linky\Http\Controllers\Controller;
 use Illegal\Linky\LinkyAuth;
@@ -33,9 +34,6 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        /** @var Authenticator $authenticator */
-        $authenticator = $request->attributes->get('authenticator');
-
         $request->validate([
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
@@ -53,8 +51,10 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        Auth::guard($authenticator->security_guard)->login($user);
+        Auth::guard(InsideAuth::current()->security_guard)->login($user);
 
-        return redirect($authenticator->dashboard() ? route($authenticator->dashboard()) : '/');
+        return redirect(
+            InsideAuth::current()->dashboard() ? route(InsideAuth::current()->dashboard()) : '/'
+        );
     }
 }

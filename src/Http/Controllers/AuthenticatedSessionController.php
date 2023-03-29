@@ -2,8 +2,8 @@
 
 namespace Illegal\InsideAuth\Http\Controllers;
 
-use Illegal\InsideAuth\Authenticator;
 use Illegal\InsideAuth\Http\Requests\LoginRequest;
+use Illegal\InsideAuth\InsideAuth;
 use Illegal\Linky\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -25,14 +25,13 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        /** @var Authenticator $authenticator */
-        $authenticator = $request->attributes->get('authenticator');
-
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        return redirect()->intended($authenticator->dashboard() ? route($authenticator->dashboard()) : '/');
+        return redirect()->intended(
+            InsideAuth::current()->dashboard() ? route(InsideAuth::current()->dashboard()) : '/'
+        );
     }
 
     /**
@@ -40,10 +39,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        /** @var Authenticator $authenticator */
-        $authenticator = $request->attributes->get('authenticator');
-
-        Auth::guard($authenticator->security_guard)->logout();
+        Auth::guard(InsideAuth::current()->security_guard)->logout();
 
         $request->session()->invalidate();
 

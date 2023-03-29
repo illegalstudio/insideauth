@@ -2,8 +2,8 @@
 
 namespace Illegal\InsideAuth\Http\Controllers;
 
-use Illegal\InsideAuth\Authenticator;
 use Illegal\InsideAuth\Facades\Password;
+use Illegal\InsideAuth\InsideAuth;
 use Illegal\Linky\Http\Controllers\Controller;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\View\View;
@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
+use Illuminate\Validation\ValidationException;
 
 class NewPasswordController extends Controller
 {
@@ -26,13 +27,10 @@ class NewPasswordController extends Controller
     /**
      * Handle an incoming new password request.
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function store(Request $request): RedirectResponse
     {
-        /** @var Authenticator $authenticator */
-        $authenticator = $request->attributes->get('authenticator');
-
         $request->validate([
             'token'    => ['required'],
             'email'    => ['required', 'email'],
@@ -59,7 +57,7 @@ class NewPasswordController extends Controller
         // the application's home authenticated view. If there is an error we can
         // redirect them back to where they came from with their error message.
         return $status == Password::PASSWORD_RESET
-            ? redirect()->route($authenticator->route_login)->with('status', __($status))
+            ? redirect()->route(InsideAuth::current()->route_login)->with('status', __($status))
             : back()->withInput($request->only('email'))
                 ->withErrors(['email' => __($status)]);
     }

@@ -2,7 +2,7 @@
 
 namespace Illegal\InsideAuth\Http\Controllers;
 
-use Illegal\InsideAuth\Authenticator;
+use Illegal\InsideAuth\InsideAuth;
 use Illegal\Linky\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,11 +14,10 @@ class EmailVerificationNotificationController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        /** @var Authenticator $authenticator */
-        $authenticator = $request->attributes->get('authenticator');
-
         if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended($authenticator->dashboard() ? route($authenticator->dashboard()) : '/');
+            return redirect()->intended(
+                InsideAuth::current()->dashboard() ? route(InsideAuth::current()->dashboard()) : '/'
+            );
         }
 
         $request->user()->sendEmailVerificationNotification();

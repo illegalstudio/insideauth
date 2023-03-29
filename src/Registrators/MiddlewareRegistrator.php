@@ -6,7 +6,7 @@ use Illegal\InsideAuth\Authenticator;
 use Illegal\InsideAuth\Contracts\RegistratorInterface;
 use Illegal\InsideAuth\Http\Middleware\Authenticate;
 use Illegal\InsideAuth\Http\Middleware\EnsureEmailIsVerified;
-use Illegal\InsideAuth\Http\Middleware\InjectIntoRequest;
+use Illegal\InsideAuth\Http\Middleware\InjectIntoApplication;
 use Illegal\InsideAuth\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -81,7 +81,7 @@ class MiddlewareRegistrator implements RegistratorInterface
         Route::aliasMiddleware($this->authenticated, Authenticate::class);
         Route::aliasMiddleware($this->ensure_verified, EnsureEmailIsVerified::class);
         Route::aliasMiddleware($this->redirect_authenticated, RedirectIfAuthenticated::class);
-        Route::aliasMiddleware($this->inject, InjectIntoRequest::class);
+        Route::aliasMiddleware($this->inject, InjectIntoApplication::class);
 
         /**
          * The web middleware, to be used on all web routes

@@ -2,7 +2,7 @@
 
 namespace Illegal\InsideAuth\Http\Controllers;
 
-use Illegal\InsideAuth\Authenticator;
+use Illegal\InsideAuth\InsideAuth;
 use Illegal\Linky\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -25,10 +25,7 @@ class ConfirmablePasswordController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        /** @var Authenticator $authenticator */
-        $authenticator = $request->attributes->get('authenticator');
-
-        if (!Auth::guard($authenticator->security_guard)->validate([
+        if (!Auth::guard(InsideAuth::current()->security_guard)->validate([
             'email'    => $request->user()->email,
             'password' => $request->password,
         ])) {
@@ -39,6 +36,8 @@ class ConfirmablePasswordController extends Controller
 
         $request->session()->put('auth.password_confirmed_at', time());
 
-        return redirect()->intended($authenticator->dashboard() ? route($authenticator->dashboard()) : '/');
+        return redirect()->intended(
+            InsideAuth::current()->dashboard() ? route(InsideAuth::current()->dashboard()) : '/'
+        );
     }
 }
