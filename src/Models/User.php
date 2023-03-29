@@ -21,7 +21,13 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, HasPrefix;
 
-    protected string $prefix = "linky_";
+    /**
+     * Override the db prefix for this model.
+     */
+    public function getPrefix(): string
+    {
+        return config('inside_auth.db.prefix');
+    }
 
     /**
      * The attributes that are mass assignable.
