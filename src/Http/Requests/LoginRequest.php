@@ -3,7 +3,6 @@
 namespace Illegal\InsideAuth\Http\Requests;
 
 use Illegal\InsideAuth\InsideAuth;
-use Illegal\Linky\LinkyAuth;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
