@@ -2,12 +2,9 @@
 
 namespace Illegal\InsideAuth\Providers;
 
-use Illegal\InsideAuth\Models\User;
 use Illegal\InsideAuth\Passwords\PasswordBrokerManager;
-use Illegal\InsideAuth\Registrator;
+use Illegal\InsideAuth\Registrators\Registrator;
 use Illuminate\Foundation\Application;
-use Illuminate\Routing\Router;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
 class ServiceProvider extends IlluminateServiceProvider
@@ -44,10 +41,7 @@ class ServiceProvider extends IlluminateServiceProvider
          * The Registrator class, used by the InsideAuth facade
          */
         $this->app->singleton(Registrator::class, function (Application $app) {
-            return new Registrator(
-                $app->make('router'),
-                $app->make('config')
-            );
+            return new Registrator();
         });
     }
 
