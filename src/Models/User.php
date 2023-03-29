@@ -89,6 +89,9 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function sendPasswordResetNotification($token): void
     {
+        /**
+         * @todo Use the authenticator
+         */
         $notification = new ResetPasswordNotification($token);
 
         $notification::$createUrlCallback = function ($notifiable, $token) {
@@ -109,6 +112,9 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function sendEmailVerificationNotification(): void
     {
+        /**
+         * @todo Use the authenticator
+         */
         if(!config('linky.auth.functionalities.email_verification')) {
             return;
         }
