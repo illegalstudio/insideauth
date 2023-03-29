@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create(config('linky.db.prefix') . 'password_resets', static function (Blueprint $table) {
+        Schema::create(config('inside_auth.db.prefix') . 'password_resets', static function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists(config('linky.db.prefix') . 'password_resets');
+        Schema::dropIfExists(config('inside_auth.db.prefix') . 'password_resets');
     }
 };
