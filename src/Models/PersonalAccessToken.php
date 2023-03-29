@@ -14,6 +14,6 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
      */
     public function getPrefix(): string
     {
-        return config('linky.db.prefix');
+        return config('inside_auth.db.prefix');
     }
 }
