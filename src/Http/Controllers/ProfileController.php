@@ -2,11 +2,12 @@
 
 namespace Illegal\InsideAuth\Http\Controllers;
 
-use Illegal\Linky\Http\Controllers\Controller;
-use Illegal\Linky\Http\Requests\ProfileUpdateRequest;
+use Illegal\InsideAuth\Http\Requests\ProfileUpdateRequest;
+use Illegal\InsideAuth\InsideAuth;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
@@ -35,7 +36,7 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('linky.auth.profile.edit')->with('status', 'profile-updated');
+        return Redirect::route(InsideAuth::current()->route_profile_edit)->with('status', 'profile-updated');
     }
 
     /**
