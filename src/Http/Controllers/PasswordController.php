@@ -2,14 +2,17 @@
 
 namespace Illegal\InsideAuth\Http\Controllers;
 
-use Illegal\Linky\Http\Controllers\Controller;
+use Illegal\InsideAuth\Contracts\IsController;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
 class PasswordController extends Controller
 {
+    use IsController;
+
     /**
      * Update the user's password.
      * @noinspection PhpVoidFunctionResultUsedInspection

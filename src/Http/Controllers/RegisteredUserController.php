@@ -2,16 +2,14 @@
 
 namespace Illegal\InsideAuth\Http\Controllers;
 
-use Illegal\InsideAuth\Authenticator;
+use Illegal\InsideAuth\Contracts\IsController;
 use Illegal\InsideAuth\Events\Registered;
 use Illegal\InsideAuth\InsideAuth;
 use Illegal\InsideAuth\Models\User;
-use Illegal\Linky\Http\Controllers\Controller;
-use Illegal\Linky\LinkyAuth;
-use Illegal\Linky\RouteServiceProvider;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
@@ -19,6 +17,8 @@ use Illuminate\Validation\ValidationException;
 
 class RegisteredUserController extends Controller
 {
+    use IsController;
+
     /**
      * Display the registration view.
      */

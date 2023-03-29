@@ -2,13 +2,16 @@
 
 namespace Illegal\InsideAuth\Http\Controllers;
 
+use Illegal\InsideAuth\Contracts\IsController;
 use Illegal\InsideAuth\InsideAuth;
-use Illegal\Linky\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class EmailVerificationNotificationController extends Controller
 {
+    use IsController;
+
     /**
      * Send a new email verification notification.
      */

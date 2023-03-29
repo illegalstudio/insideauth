@@ -2,16 +2,19 @@
 
 namespace Illegal\InsideAuth\Http\Controllers;
 
+use Illegal\InsideAuth\Contracts\IsController;
 use Illegal\InsideAuth\InsideAuth;
-use Illegal\Linky\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class ConfirmablePasswordController extends Controller
 {
+    use IsController;
+
     /**
      * Show the confirm password view.
      */

@@ -2,15 +2,18 @@
 
 namespace Illegal\InsideAuth\Http\Controllers;
 
+use Illegal\InsideAuth\Contracts\IsController;
 use Illegal\InsideAuth\Facades\Password;
-use Illegal\Linky\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Validation\ValidationException;
 
 class PasswordResetLinkController extends Controller
 {
+    use IsController;
+
     /**
      * Display the password reset link request view.
      *

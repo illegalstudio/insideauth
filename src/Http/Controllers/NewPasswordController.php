@@ -2,13 +2,14 @@
 
 namespace Illegal\InsideAuth\Http\Controllers;
 
+use Illegal\InsideAuth\Contracts\IsController;
 use Illegal\InsideAuth\Facades\Password;
 use Illegal\InsideAuth\InsideAuth;
-use Illegal\Linky\Http\Controllers\Controller;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
@@ -16,6 +17,8 @@ use Illuminate\Validation\ValidationException;
 
 class NewPasswordController extends Controller
 {
+    use IsController;
+
     /**
      * Display the password reset view.
      */

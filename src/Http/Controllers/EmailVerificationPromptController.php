@@ -2,14 +2,17 @@
 
 namespace Illegal\InsideAuth\Http\Controllers;
 
+use Illegal\InsideAuth\Contracts\IsController;
 use Illegal\InsideAuth\InsideAuth;
-use Illegal\Linky\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class EmailVerificationPromptController extends Controller
 {
+    use IsController;
+
     /**
      * Display the email verification prompt.
      */

@@ -2,16 +2,17 @@
 
 namespace Illegal\InsideAuth\Http\Controllers;
 
-use Illegal\InsideAuth\Authenticator;
+use Illegal\InsideAuth\Contracts\IsController;
 use Illegal\InsideAuth\InsideAuth;
-use Illegal\Linky\Http\Controllers\Controller;
-use Illegal\Linky\RouteServiceProvider;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Controller;
 
 class VerifyEmailController extends Controller
 {
+    use IsController;
+
     /**
      * Mark the authenticated user's email address as verified.
      */
