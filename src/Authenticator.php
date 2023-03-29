@@ -49,6 +49,26 @@ class Authenticator
     private ?string $dashboard = null;
 
     /**
+     * Should the registration be enabled?
+     */
+    private bool $registrationEnabled = true;
+
+    /**
+     * Should the forgot password be enabled?
+     */
+    private bool $forgotPasswordEnabled = true;
+
+    /**
+     * Should the email verification be enabled?
+     */
+    private bool $emailVerificationEnabled = true;
+
+    /**
+     * Should the user profile be enabled?
+     */
+    private bool $userProfileEnabled = true;
+
+    /**
      * Construct the Authenticator, building the parameters collection
      *
      * @param string $name The name of the auth
@@ -108,5 +128,105 @@ class Authenticator
     public function get($key)
     {
         return $this->parameters->get($key);
+    }
+
+    /**
+     * Toggle the registration
+     */
+    public function toggleRegistration(bool $enabled): self
+    {
+        $this->registrationEnabled = $enabled;
+        return $this;
+    }
+
+    /**
+     * Disable the registration
+     */
+    public function withoutRegistration(): self
+    {
+        return $this->toggleRegistration(false);
+    }
+
+    /**
+     * Is the registration enabled?
+     */
+    public function isRegistrationEnabled(): bool
+    {
+        return $this->registrationEnabled;
+    }
+
+    /**
+     * Toggle the forgot password
+     */
+    public function toggleForgotPassword(bool $enabled): self
+    {
+        $this->forgotPasswordEnabled = $enabled;
+        return $this;
+    }
+
+    /**
+     * Disable the forgot password
+     */
+    public function withoutForgotPassword(): self
+    {
+        return $this->toggleForgotPassword(false);
+    }
+
+    /**
+     * Is the forgot password enabled?
+     */
+    public function isForgotPasswordEnabled(): bool
+    {
+        return $this->forgotPasswordEnabled;
+    }
+
+    /**
+     * Toggle the email verification
+     */
+    public function toggleEmailVerification(bool $enabled): self
+    {
+        $this->emailVerificationEnabled = $enabled;
+        return $this;
+    }
+
+    /**
+     * Disable the email verification
+     */
+    public function withoutEmailVerification(): self
+    {
+        return $this->toggleEmailVerification(false);
+    }
+
+    /**
+     * Is the email verification enabled?
+     */
+    public function isEmailVerificationEnabled(): bool
+    {
+        return $this->emailVerificationEnabled;
+    }
+
+    /**
+     * Toggle the user profile
+     */
+    public function toggleUserProfile(bool $enabled): self
+    {
+        $this->userProfileEnabled = $enabled;
+        return $this;
+    }
+
+    /**
+     * Disable the user profile
+     */
+    public function withoutUserProfile(): self
+    {
+        return $this->toggleUserProfile(false);
+    }
+
+    /**
+     * Is the user profile enabled?
+     */
+    public function isUserProfileEnabled(): bool
+    {
+        return $this->userProfileEnabled;
     }
 }
