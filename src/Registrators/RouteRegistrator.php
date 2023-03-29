@@ -11,13 +11,13 @@ use Illegal\InsideAuth\Http\Controllers\EmailVerificationPromptController;
 use Illegal\InsideAuth\Http\Controllers\NewPasswordController;
 use Illegal\InsideAuth\Http\Controllers\PasswordController;
 use Illegal\InsideAuth\Http\Controllers\PasswordResetLinkController;
+use Illegal\InsideAuth\Http\Controllers\ProfileController;
 use Illegal\InsideAuth\Http\Controllers\RegisteredUserController;
 use Illegal\InsideAuth\Http\Controllers\VerifyEmailController;
 use Illegal\InsideAuth\Http\Middleware\EnsureEmailVerificationIsEnabled;
 use Illegal\InsideAuth\Http\Middleware\EnsureForgotPasswordIsEnabled;
 use Illegal\InsideAuth\Http\Middleware\EnsureRegistrationIsEnabled;
 use Illegal\InsideAuth\Http\Middleware\EnsureUserProfileIsEnabled;
-use Illegal\Linky\Http\Controllers\ProfileController;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 
