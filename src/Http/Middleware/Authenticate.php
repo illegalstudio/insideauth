@@ -42,12 +42,7 @@ class Authenticate extends Middleware
         }
         $this->route = array_shift($guards);
 
-        /**
-         * Authenticate only if a valid user is required
-         */
-        if (config('linky.auth.require_valid_user')) {
-            $this->authenticate($request, $guards);
-        }
+        $this->authenticate($request, $guards);
 
         return $next($request);
     }
