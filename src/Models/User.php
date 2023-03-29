@@ -89,7 +89,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Send the password reset notification.
-     * Overriding the default implementation to use the linky custom URL.
+     * Overriding the default implementation to use the InsideAuth custom URL.
      *
      * @param $token
      * @return void
@@ -113,7 +113,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Send the email verification notification.
-     * Overriding the default implementation to use the linky custom URL.
+     * Overriding the default implementation to use the InsideAuth custom URL.
      *
      * @return void
      */
