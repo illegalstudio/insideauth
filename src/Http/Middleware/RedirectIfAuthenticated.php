@@ -3,9 +3,7 @@
 namespace Illegal\InsideAuth\Http\Middleware;
 
 use Closure;
-use Illegal\InsideAuth\InsideAuth;
-use Illegal\Linky\LinkyAuth;
-use Illegal\Linky\RouteServiceProvider;
+use Illegal\InsideAuth\Authenticator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -18,14 +16,17 @@ class RedirectIfAuthenticated
      *
      * @param Request $request
      * @param Closure $next
+     * @param $guard
+     * @param $redirectToRoute
      * @return Response|RedirectResponse
      */
     public function handle(Request $request, Closure $next): Response|RedirectResponse
     {
-        $guard = LinkyAuth::guard();
+        /** @var Authenticator $authenticator */
+        $authenticator = $request->attributes->get('authenticator');
 
-        if (Auth::guard($guard)->check()) {
-            return redirect(RouteServiceProvider::HOME);
+        if (Auth::guard($authenticator->security_guard)->check()) {
+            return redirect($authenticator->dashboard() ? route($authenticator->dashboard()) : '/');
         }
 
         return $next($request);
