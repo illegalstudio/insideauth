@@ -44,7 +44,7 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::guard(LinkyAuth::guard())->attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        if (! Auth::guard(InsideAuth::current()->security_guard)->attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
