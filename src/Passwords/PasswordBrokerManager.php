@@ -16,6 +16,6 @@ class PasswordBrokerManager extends IlluminatePasswordBrokerManager
      */
     public function __call($method, $parameters)
     {
-        return $this->broker(InsideAuth::getPasswordBrokerName('linky'))->{$method}(...$parameters);
+        return $this->broker(InsideAuth::current()->security_password_broker)->{$method}(...$parameters);
     }
 }

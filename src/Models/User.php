@@ -2,6 +2,7 @@
 
 namespace Illegal\InsideAuth\Models;
 
+use Illegal\InsideAuth\InsideAuth;
 use Illegal\LaravelUtils\Contracts\HasPrefix;
 use Illegal\Linky\Models\Content;
 use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
@@ -95,7 +96,7 @@ class User extends Authenticatable implements MustVerifyEmail
         $notification = new ResetPasswordNotification($token);
 
         $notification::$createUrlCallback = function ($notifiable, $token) {
-            return url(route('linky.auth.password.reset', [
+            return url(route(InsideAuth::current()->route_password_reset, [
                 'token' => $token,
                 'email' => $notifiable->getEmailForPasswordReset(),
             ], false));
@@ -112,10 +113,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function sendEmailVerificationNotification(): void
     {
-        /**
-         * @todo Use the authenticator
-         */
-        if(!config('linky.auth.functionalities.email_verification')) {
+        if (InsideAuth::isEmailVerificationEnabled()) {
             return;
         }
 
@@ -123,10 +121,10 @@ class User extends Authenticatable implements MustVerifyEmail
 
         $notification::$createUrlCallback = function ($notifiable) {
             return URL::temporarySignedRoute(
-                'linky.auth.verification.verify',
+                InsideAuth::current()->route_verification_verify,
                 Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
                 [
-                    'id' => $notifiable->getKey(),
+                    'id'   => $notifiable->getKey(),
                     'hash' => sha1($notifiable->getEmailForVerification()),
                 ]
             );
