@@ -13,6 +13,10 @@ use Illegal\InsideAuth\Http\Controllers\PasswordController;
 use Illegal\InsideAuth\Http\Controllers\PasswordResetLinkController;
 use Illegal\InsideAuth\Http\Controllers\RegisteredUserController;
 use Illegal\InsideAuth\Http\Controllers\VerifyEmailController;
+use Illegal\InsideAuth\Http\Middleware\EnsureEmailVerificationIsEnabled;
+use Illegal\InsideAuth\Http\Middleware\EnsureForgotPasswordIsEnabled;
+use Illegal\InsideAuth\Http\Middleware\EnsureRegistrationIsEnabled;
+use Illegal\InsideAuth\Http\Middleware\EnsureUserProfileIsEnabled;
 use Illegal\Linky\Http\Controllers\ProfileController;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
@@ -121,10 +125,10 @@ class RouteRegistrator implements RegistratorInterface
      */
     private function registerRegisterRoutes(): void
     {
-        if (config('linky.auth.functionalities.register')) {
+        Route::middleware(EnsureRegistrationIsEnabled::class)->group(function() {
             Route::get('register', [RegisteredUserController::class, 'create'])->name($this->register);
             Route::post('register', [RegisteredUserController::class, 'store']);
-        }
+        });
     }
 
     /**
@@ -132,13 +136,13 @@ class RouteRegistrator implements RegistratorInterface
      */
     private function registerForgotPasswordRoutes(): void
     {
-        if (config('linky.auth.functionalities.forgot_password')) {
+        Route::middleware(EnsureForgotPasswordIsEnabled::class)->group(function() {
             Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name($this->password_request);
             Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])->name($this->password_email);
 
             Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])->name($this->password_reset);
             Route::post('reset-password', [NewPasswordController::class, 'store'])->name($this->password_store);
-        }
+        });
     }
 
     /**
@@ -154,8 +158,7 @@ class RouteRegistrator implements RegistratorInterface
      */
     public function registerEmailVerificationRoutes(): void
     {
-        if (config('linky.auth.functionalities.email_verification')) {
-
+        Route::middleware(EnsureEmailVerificationIsEnabled::class)->group(function() {
             Route::get('verify-email', EmailVerificationPromptController::class)->name($this->verification_notice);
             Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
                 ->middleware(['signed', 'throttle:6,1'])
@@ -169,7 +172,7 @@ class RouteRegistrator implements RegistratorInterface
             Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
 
             Route::put('password', [PasswordController::class, 'update'])->name($this->password_update);
-        }
+        });
     }
 
     /**
@@ -177,10 +180,10 @@ class RouteRegistrator implements RegistratorInterface
      */
     public function registerProfileRoutes(): void
     {
-        if (config('linky.auth.functionalities.user_profile')) {
+        Route::middleware(EnsureUserProfileIsEnabled::class)->group(function () {
             Route::get('/profile', [ProfileController::class, 'edit'])->name($this->profile_edit);
             Route::patch('/profile', [ProfileController::class, 'update'])->name($this->profile_update);
             Route::delete('/profile', [ProfileController::class, 'destroy'])->name($this->profile_destroy);
-        }
+        });
     }
 }
