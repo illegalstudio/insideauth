@@ -2,14 +2,13 @@
 
 namespace Illegal\InsideAuth\Models;
 
+use Illegal\InsideAuth\Events\UserDeleted;
 use Illegal\InsideAuth\InsideAuth;
 use Illegal\LaravelUtils\Contracts\HasPrefix;
-use Illegal\Linky\Models\Content;
 use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -68,23 +67,11 @@ class User extends Authenticatable implements MustVerifyEmail
             $user->tokens()->delete();
 
             /**
-             * Delete all contents owned by the user.
+             * Dispatch the user deleted event, so that packages can react to it.
              */
-            $user->contents->map(function ($content) {
-                $content->delete();
-            });
+            UserDeleted::dispatch($user);
         });
         parent::boot();
-    }
-
-    /**
-     * Contents owned by the user.
-     *
-     * @return HasMany
-     */
-    public function contents(): HasMany
-    {
-        return $this->hasMany(Content::class);
     }
 
     /**
