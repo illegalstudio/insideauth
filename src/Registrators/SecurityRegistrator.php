@@ -68,7 +68,7 @@ class SecurityRegistrator implements RegistratorInterface
          */
         Config::set('auth.passwords.' . $this->password_broker, [
             'provider' => $this->provider,
-            'table'    => config('linky.db.prefix') . 'password_resets',
+            'table'    => config('inside_auth.db.prefix') . 'password_resets',
             'expire'   => 60,
             'throttle' => 60,
         ]);
