@@ -2,6 +2,7 @@
 
 namespace Illegal\InsideAuth;
 
+use Illegal\InsideAuth\Registrators\Registrator;
 use Illuminate\Support\Facades\Facade;
 
 /**
