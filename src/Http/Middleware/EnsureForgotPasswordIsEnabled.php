@@ -14,7 +14,7 @@ class EnsureForgotPasswordIsEnabled
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if(!InsideAuth::current()->isForgotPasswordEnabled()) {
+        if(!InsideAuth::current()->forgot_password_enabled) {
             abort(404);
         }
 

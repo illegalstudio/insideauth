@@ -20,7 +20,7 @@ class VerifyEmailController extends Controller
     {
         if ($request->user()->hasVerifiedEmail()) {
             return redirect()->intended(
-                ( InsideAuth::current()->dashboard() ? route(InsideAuth::current()->dashboard()) : '/' ) . '?verified=1'
+                ( InsideAuth::current()->dashboard ? route(InsideAuth::current()->dashboard) : '/' ) . '?verified=1'
             );
         }
 
@@ -29,7 +29,7 @@ class VerifyEmailController extends Controller
         }
 
         return redirect()->intended(
-            ( InsideAuth::current()->dashboard() ? route(InsideAuth::current()->dashboard()) : '/' ) . '?verified=1'
+            ( InsideAuth::current()->dashboard ? route(InsideAuth::current()->dashboard) : '/' ) . '?verified=1'
         );
     }
 }

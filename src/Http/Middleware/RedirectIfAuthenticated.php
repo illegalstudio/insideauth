@@ -26,7 +26,7 @@ class RedirectIfAuthenticated
         $authenticator = $request->attributes->get('authenticator');
 
         if (Auth::guard($authenticator->security_guard)->check()) {
-            return redirect($authenticator->dashboard() ? route($authenticator->dashboard()) : '/');
+            return redirect($authenticator->dashboard ? route($authenticator->dashboard) : '/');
         }
 
         return $next($request);

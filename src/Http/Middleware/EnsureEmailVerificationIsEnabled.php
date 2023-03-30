@@ -14,7 +14,7 @@ class EnsureEmailVerificationIsEnabled
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if(!InsideAuth::current()->isEmailVerificationEnabled()) {
+        if(!InsideAuth::current()->email_verification_enabled) {
             abort(404);
         }
 

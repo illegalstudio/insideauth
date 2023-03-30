@@ -20,7 +20,7 @@ class EmailVerificationPromptController extends Controller
     {
         return $request->user()->hasVerifiedEmail()
             ? redirect()->intended(
-                InsideAuth::current()->dashboard() ? route(InsideAuth::current()->dashboard()) : '/'
+                InsideAuth::current()->dashboard ? route(InsideAuth::current()->dashboard) : '/'
             )
             : view('inside_auth::auth.verify-email');
     }

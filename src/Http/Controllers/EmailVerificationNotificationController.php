@@ -19,7 +19,7 @@ class EmailVerificationNotificationController extends Controller
     {
         if ($request->user()->hasVerifiedEmail()) {
             return redirect()->intended(
-                InsideAuth::current()->dashboard() ? route(InsideAuth::current()->dashboard()) : '/'
+                InsideAuth::current()->dashboard ? route(InsideAuth::current()->dashboard) : '/'
             );
         }
 

@@ -14,7 +14,7 @@ class EnsureUserProfileIsEnabled
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if(!InsideAuth::current()->isUserProfileEnabled()) {
+        if(!InsideAuth::current()->user_profile_enabled) {
             abort(404);
         }
 

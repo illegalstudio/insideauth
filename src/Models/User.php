@@ -106,7 +106,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function sendEmailVerificationNotification(): void
     {
-        if (!InsideAuth::current()->isEmailVerificationEnabled()) {
+        if (!InsideAuth::current()->email_verification_enabled) {
             return;
         }
 

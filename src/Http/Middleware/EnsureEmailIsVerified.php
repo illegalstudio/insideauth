@@ -21,7 +21,7 @@ class EnsureEmailIsVerified
         /**
          * Only check if email verification is enabled
          */
-        if(InsideAuth::current()->isEmailVerificationEnabled()) {
+        if(InsideAuth::current()->email_verification_enabled) {
             if (!$request->user() ||
                 ( $request->user() instanceof MustVerifyEmail &&
                     !$request->user()->hasVerifiedEmail() )) {

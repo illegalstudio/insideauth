@@ -14,7 +14,7 @@ class EnsureRegistrationIsEnabled
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if(!InsideAuth::current()->isRegistrationEnabled()) {
+        if(!InsideAuth::current()->registration_enabled) {
             abort(404);
         }
 
