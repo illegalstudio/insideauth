@@ -2,6 +2,7 @@
 
 namespace Illegal\InsideAuth\Providers;
 
+use Illegal\InsideAuth\InsideAuth;
 use Illegal\InsideAuth\Passwords\PasswordBrokerManager;
 use Illegal\InsideAuth\Registrators\Registrator;
 use Illuminate\Foundation\Application;
@@ -24,12 +25,14 @@ class ServiceProvider extends IlluminateServiceProvider
     {
         $this->mergeConfigurations();
         $this->loadMigrations();
+        $this->loadViews();
     }
 
     /**
      * Register the singletons
      */
-    private function registerSingletons() {
+    private function registerSingletons()
+    {
         /**
          * The PasswordBroker manager
          */
@@ -43,6 +46,8 @@ class ServiceProvider extends IlluminateServiceProvider
         $this->app->singleton(Registrator::class, function (Application $app) {
             return new Registrator();
         });
+
+        $this->app->alias('InsideAuth', InsideAuth::class);
     }
 
     /**
@@ -61,5 +66,13 @@ class ServiceProvider extends IlluminateServiceProvider
         $this->loadMigrationsFrom([
             __DIR__ . '/../../database/migrations/'
         ]);
+    }
+
+    /**
+     * Load the views
+     */
+    private function loadViews(): void
+    {
+        $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'inside_auth');
     }
 }
