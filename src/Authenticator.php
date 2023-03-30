@@ -8,6 +8,13 @@ use Illuminate\Support\Collection;
  * The Authenticator class is used to store the parameters of the auth.
  * It will be available during the lifecycle of the request.
  *
+ * Internal params:
+ * @property string $dashboard The name of the dashboard route
+ * @property string $registration_enabled Whether registration is enabled
+ * @property string $forgot_password_enabled Whether forgot password is enabled
+ * @property string $email_verification_enabled Whether email verification is enabled
+ * @property string $user_profile_enabled Whether the user profile is enabled
+ *
  * Params that are registered by RouteRegistrator:
  * @property string $route_login The name of the login route
  * @property string $route_register The name of the register route
@@ -75,7 +82,13 @@ class Authenticator
      */
     public function __construct(private readonly string $name)
     {
-        $this->parameters = Collection::make();
+        $this->parameters = Collection::make([
+            'dashboard'                  => null,
+            'registration_enabled'       => true,
+            'forgot_password_enabled'    => true,
+            'email_verification_enabled' => true,
+            'user_profile_enabled'       => true,
+        ]);
     }
 
     /**
@@ -84,24 +97,6 @@ class Authenticator
     public function name(): string
     {
         return $this->name;
-    }
-
-    /**
-     * Set the dashboard route
-     */
-    public function withDashboard(string $dashboard): static
-    {
-        $this->dashboard = $dashboard;
-
-        return $this;
-    }
-
-    /**
-     * Get the dashboard route
-     */
-    public function dashboard(): ?string
-    {
-        return $this->dashboard;
     }
 
     /**
@@ -123,110 +118,64 @@ class Authenticator
     }
 
     /**
-     * Returns a variable from the parameters collection
+     * Internal helpers to retrieve a vale from the collection
      */
-    public function get($key)
+    private function get($key)
     {
         return $this->parameters->get($key);
     }
 
     /**
-     * Toggle the registration
+     * Internal helper to set a value inside the collection
      */
-    public function toggleRegistration(bool $enabled): self
+    private function set(string $key, mixed $value): static
     {
-        $this->registrationEnabled = $enabled;
+        $this->parameters->put($key, $value);
+
         return $this;
     }
 
+    ###############################################
+    # Helpers to set the some internal parameters #
+    ###############################################
+
     /**
-     * Disable the registration
+     * Set the dashboard route
      */
-    public function withoutRegistration(): self
+    public function withDashboard(string $dashboard): static
     {
-        return $this->toggleRegistration(false);
+        return $this->set('dashboard', $dashboard);
     }
 
     /**
-     * Is the registration enabled?
+     * Disable registration
      */
-    public function isRegistrationEnabled(): bool
+    public function withoutRegistration(): static
     {
-        return $this->registrationEnabled;
+        return $this->set('registration_enabled', false);
     }
 
     /**
-     * Toggle the forgot password
+     * Disable forgot password
      */
-    public function toggleForgotPassword(bool $enabled): self
+    public function withoutForgotPassword(): static
     {
-        $this->forgotPasswordEnabled = $enabled;
-        return $this;
+        return $this->set('forgot_password_enabled', false);
     }
 
     /**
-     * Disable the forgot password
+     * Disable email verification
      */
-    public function withoutForgotPassword(): self
+    public function withoutEmailVerification(): static
     {
-        return $this->toggleForgotPassword(false);
+        return $this->set('email_verification_enabled', false);
     }
 
     /**
-     * Is the forgot password enabled?
+     * Disable user profile
      */
-    public function isForgotPasswordEnabled(): bool
+    public function withoutUserProfile(): static
     {
-        return $this->forgotPasswordEnabled;
-    }
-
-    /**
-     * Toggle the email verification
-     */
-    public function toggleEmailVerification(bool $enabled): self
-    {
-        $this->emailVerificationEnabled = $enabled;
-        return $this;
-    }
-
-    /**
-     * Disable the email verification
-     */
-    public function withoutEmailVerification(): self
-    {
-        return $this->toggleEmailVerification(false);
-    }
-
-    /**
-     * Is the email verification enabled?
-     */
-    public function isEmailVerificationEnabled(): bool
-    {
-        return $this->emailVerificationEnabled;
-    }
-
-    /**
-     * Toggle the user profile
-     */
-    public function toggleUserProfile(bool $enabled): self
-    {
-        $this->userProfileEnabled = $enabled;
-        return $this;
-    }
-
-    /**
-     * Disable the user profile
-     */
-    public function withoutUserProfile(): self
-    {
-        return $this->toggleUserProfile(false);
-    }
-
-    /**
-     * Is the user profile enabled?
-     */
-    public function isUserProfileEnabled(): bool
-    {
-        return $this->userProfileEnabled;
+        return $this->set('user_profile_enabled', false);
     }
 }
