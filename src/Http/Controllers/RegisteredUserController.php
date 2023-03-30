@@ -24,7 +24,7 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('inside_auth::auth.register');
+        return view(InsideAuth::current()->template_register);
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Illegal\InsideAuth\Http\Controllers;
 
 use Illegal\InsideAuth\Contracts\IsController;
 use Illegal\InsideAuth\Facades\Password;
+use Illegal\InsideAuth\InsideAuth;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class PasswordResetLinkController extends Controller
      */
     public function create(): View
     {
-        return view('inside_auth::auth.forgot-password');
+        return view(InsideAuth::current()->template_forgot_password);
     }
 
     /**

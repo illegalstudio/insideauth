@@ -24,7 +24,7 @@ class NewPasswordController extends Controller
      */
     public function create(Request $request): View
     {
-        return view('inside_auth::auth.reset-password', ['request' => $request]);
+        return view(InsideAuth::current()->template_reset_password, ['request' => $request]);
     }
 
     /**

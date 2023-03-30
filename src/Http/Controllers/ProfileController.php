@@ -18,7 +18,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('inside_auth::profile.edit', [
+        return view(InsideAuth::current()->template_profile_edit, [
             'user' => $request->user(),
         ]);
     }

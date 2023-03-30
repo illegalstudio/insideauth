@@ -20,7 +20,7 @@ class ConfirmablePasswordController extends Controller
      */
     public function show(): View
     {
-        return view('inside_auth::auth.confirm-password');
+        return view(InsideAuth::current()->template_confirm_password);
     }
 
     /**

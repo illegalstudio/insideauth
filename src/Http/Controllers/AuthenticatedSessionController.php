@@ -20,7 +20,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('inside_auth::auth.login');
+        return view(InsideAuth::current()->template_login);
     }
 
     /**
