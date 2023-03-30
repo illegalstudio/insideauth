@@ -3,7 +3,7 @@
         {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
     </div>
 
-    <form method="POST" action="{{ route('linky.auth.password.confirm') }}">
+    <form method="POST" action="{{ route(insideauth()->route_password_confirm) }}">
         @csrf
 
         <!-- Password -->

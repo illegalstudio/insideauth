@@ -1,5 +1,5 @@
 <x-linky::layout>
-    <form method="POST" action="{{ route('linky.auth.password.store') }}">
+    <form method="POST" action="{{ route(insideauth()->route_password_store) }}">
         @csrf
 
         <!-- Password Reset Token -->

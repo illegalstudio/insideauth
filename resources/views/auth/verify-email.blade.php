@@ -10,7 +10,7 @@
     @endif
 
     <div class="mt-4 flex items-center justify-between">
-        <form method="POST" action="{{ route('linky.auth.verification.send') }}">
+        <form method="POST" action="{{ route(insideauth()->route_verification_send) }}">
             @csrf
 
             <div>
@@ -20,14 +20,12 @@
             </div>
         </form>
 
-        @if (Route::has('linky.auth.logout'))
-            <form method="POST" action="{{ route('linky.auth.logout') }}">
-                @csrf
+        <form method="POST" action="{{ route(insideauth()->route_logout) }}">
+            @csrf
 
-                <button type="submit" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    {{ __('Log Out') }}
-                </button>
-            </form>
-        @endif
+            <button type="submit" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                {{ __('Log Out') }}
+            </button>
+        </form>
     </div>
 </x-linky::layout>

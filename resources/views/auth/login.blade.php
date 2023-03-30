@@ -1,5 +1,5 @@
 <x-linky::layout>
-    <form method="POST" action="{{ route('linky.auth.login') }}">
+    <form method="POST" action="{{ route(insideauth()->route_login) }}">
         @csrf
 
         <!-- Email Address -->
@@ -30,8 +30,8 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            @if (Route::has('linky.auth.password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('linky.auth.password.request') }}">
+            @if (insideauth()->forgot_password_enabled)
+                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route(insideauth()->route_password_request) }}">
                     {{ __('Forgot your password?') }}
                 </a>
             @endif
@@ -42,8 +42,8 @@
         </div>
 
         <div class="mt-10 flex flex-col items-center sm:flex-col sm:items-start sm:mt-2">
-            @if (Route::has('linky.auth.register'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('linky.auth.register') }}">
+            @if (insideauth()->registration_enabled)
+                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route(insideauth()->route_register) }}">
                     {{ __('Dont\'t have an account? Register here') }}
                 </a>
             @endif

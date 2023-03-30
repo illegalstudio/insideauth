@@ -9,11 +9,11 @@
         </p>
     </header>
 
-    <form id="send-verification" method="post" action="{{ route('linky.auth.verification.send') }}">
+    <form id="send-verification" method="post" action="{{ route(insideauth()->route_verification_send) }}">
         @csrf
     </form>
 
-    <form method="post" action="{{ route('linky.auth.profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route(insideauth()->route_password_update) }}" class="mt-6 space-y-6">
         @csrf
         @method('patch')
 

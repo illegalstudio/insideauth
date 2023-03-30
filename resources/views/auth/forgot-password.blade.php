@@ -9,7 +9,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('linky.auth.password.email') }}">
+    <form method="POST" action="{{ route(insideauth()->route_password_email) }}">
         @csrf
 
         <!-- Email Address -->

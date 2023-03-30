@@ -9,7 +9,7 @@
         </p>
     </header>
 
-    <form method="post" action="{{ route('linky.auth.password.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route(insideauth()->route_password_update) }}" class="mt-6 space-y-6">
         @csrf
         @method('put')
 
