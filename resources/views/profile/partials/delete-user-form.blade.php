@@ -9,12 +9,12 @@
         </p>
     </header>
 
-    <x-linky::danger-button
+    <x-inside_auth::danger-button
         x-data=""
         x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-    >{{ __('Delete Account') }}</x-linky::danger-button>
+    >{{ __('Delete Account') }}</x-inside_auth::danger-button>
 
-    <x-linky::modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable="">
+    <x-inside_auth::modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable="">
         <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
             @csrf
             @method('delete')
@@ -28,9 +28,9 @@
             </p>
 
             <div class="mt-6">
-                <x-linky::input-label for="password" value="{{ __('Password') }}" class="sr-only" />
+                <x-inside_auth::input-label for="password" value="{{ __('Password') }}" class="sr-only" />
 
-                <x-linky::input-text
+                <x-inside_auth::input-text
                     id="password"
                     name="password"
                     type="password"
@@ -38,18 +38,18 @@
                     placeholder="{{ __('Password') }}"
                 />
 
-                <x-linky::input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+                <x-inside_auth::input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
             </div>
 
             <div class="mt-6 flex justify-end">
-                <x-linky::secondary-button x-on:click="$dispatch('close')">
+                <x-inside_auth::secondary-button x-on:click="$dispatch('close')">
                     {{ __('Cancel') }}
-                </x-linky::secondary-button>
+                </x-inside_auth::secondary-button>
 
-                <x-linky::danger-button class="ml-3">
+                <x-inside_auth::danger-button class="ml-3">
                     {{ __('Delete Account') }}
-                </x-linky::danger-button>
+                </x-inside_auth::danger-button>
             </div>
         </form>
-    </x-linky::modal>
+    </x-inside_auth::modal>
 </section>

@@ -1,24 +1,24 @@
-<x-linky::layout>
+<x-inside_auth::layout>
     <form method="POST" action="{{ route(insideauth()->route_login) }}">
         @csrf
 
         <!-- Email Address -->
         <div>
-            <x-linky::input-label for="email" :value="__('Email')" />
-            <x-linky::input-text id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required="" autofocus="" autocomplete="username" />
-            <x-linky::input-error :messages="$errors->get('email')" class="mt-2" />
+            <x-inside_auth::input-label for="email" :value="__('Email')" />
+            <x-inside_auth::input-text id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required="" autofocus="" autocomplete="username" />
+            <x-inside_auth::input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
         <!-- Password -->
         <div class="mt-4">
-            <x-linky::input-label for="password" :value="__('Password')" />
+            <x-inside_auth::input-label for="password" :value="__('Password')" />
 
-            <x-linky::input-text id="password" class="block mt-1 w-full"
+            <x-inside_auth::input-text id="password" class="block mt-1 w-full"
                             type="password"
                             name="password"
                             required="" autocomplete="current-password" />
 
-            <x-linky::input-error :messages="$errors->get('password')" class="mt-2" />
+            <x-inside_auth::input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
         <!-- Remember Me -->
@@ -36,9 +36,9 @@
                 </a>
             @endif
 
-            <x-linky::button-primary class="ml-3">
+            <x-inside_auth::button-primary class="ml-3">
                 {{ __('Log in') }}
-            </x-linky::button-primary>
+            </x-inside_auth::button-primary>
         </div>
 
         <div class="mt-10 flex flex-col items-center sm:flex-col sm:items-start sm:mt-2">
@@ -50,4 +50,4 @@
         </div>
 
     </form>
-</x-linky::layout>
+</x-inside_auth::layout>
