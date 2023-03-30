@@ -14,6 +14,13 @@ use Illuminate\Support\Collection;
  * @property string $forgot_password_enabled Whether forgot password is enabled
  * @property string $email_verification_enabled Whether email verification is enabled
  * @property string $user_profile_enabled Whether the user profile is enabled
+ * @property string $template_confirm_password The name of the confirm password template
+ * @property string $template_forgot_password The name of the forgot password template
+ * @property string $template_login The name of the login template
+ * @property string $template_register The name of the register template
+ * @property string $template_reset_password The name of the reset password template
+ * @property string $template_verify_email The name of the verify email template
+ * @property string $template_profile_edit The name of the profile edit template
  *
  * Params that are registered by RouteRegistrator:
  * @property string $route_login The name of the login route
@@ -51,31 +58,6 @@ class Authenticator
     public Collection $parameters;
 
     /**
-     * The name of the dashboard route, we'll use this to redirect the user to the dashboard after login
-     */
-    private ?string $dashboard = null;
-
-    /**
-     * Should the registration be enabled?
-     */
-    private bool $registrationEnabled = true;
-
-    /**
-     * Should the forgot password be enabled?
-     */
-    private bool $forgotPasswordEnabled = true;
-
-    /**
-     * Should the email verification be enabled?
-     */
-    private bool $emailVerificationEnabled = true;
-
-    /**
-     * Should the user profile be enabled?
-     */
-    private bool $userProfileEnabled = true;
-
-    /**
      * Construct the Authenticator, building the parameters collection
      *
      * @param string $name The name of the auth
@@ -88,6 +70,13 @@ class Authenticator
             'forgot_password_enabled'    => true,
             'email_verification_enabled' => true,
             'user_profile_enabled'       => true,
+            'template_confirm_password'  => 'inside_auth::auth.confirm-password',
+            'template_forgot_password'   => 'inside_auth::auth.forgot-password',
+            'template_login'             => 'inside_auth::auth.login',
+            'template_register'          => 'inside_auth::auth.register',
+            'template_reset_password'    => 'inside_auth::auth.reset-password',
+            'template_verify_email'      => 'inside_auth::auth.verify-email',
+            'template_profile_edit'      => 'inside_auth::profile.edit',
         ]);
     }
 
@@ -177,5 +166,61 @@ class Authenticator
     public function withoutUserProfile(): static
     {
         return $this->set('user_profile_enabled', false);
+    }
+
+    /**
+     * Set the confirm password template
+     */
+    public function withConfirmPasswordTemplate(string $template): static
+    {
+        return $this->set('template_confirm_password', $template);
+    }
+
+    /**
+     * Set the forgot password template
+     */
+    public function withForgotPasswordTemplate(string $template): static
+    {
+        return $this->set('template_forgot_password', $template);
+    }
+
+    /**
+     * Set the login template
+     */
+    public function withLoginTemplate(string $template): static
+    {
+        return $this->set('template_login', $template);
+    }
+
+    /**
+     * Set the register template
+     */
+    public function withRegisterTemplate(string $template): static
+    {
+        return $this->set('template_register', $template);
+    }
+
+    /**
+     * Set the reset password template
+     */
+    public function withResetPasswordTemplate(string $template): static
+    {
+        return $this->set('template_reset_password', $template);
+    }
+
+    /**
+     * Set the verify email template
+     */
+    public function withVerifyEmailTemplate(string $template): static
+    {
+        return $this->set('template_verify_email', $template);
+    }
+
+    /**
+     * Set the profile edit template
+     */
+    public function withProfileEditTemplate(string $template): static
+    {
+        return $this->set('template_profile_edit', $template);
     }
 }
