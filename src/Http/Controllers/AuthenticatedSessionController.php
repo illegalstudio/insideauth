@@ -20,7 +20,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('linky::auth.login');
+        return view('inside_auth::auth.login');
     }
 
     /**
@@ -33,7 +33,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         return redirect()->intended(
-            InsideAuth::current()->dashboard() ? route(InsideAuth::current()->dashboard()) : '/'
+            InsideAuth::current()->dashboard ? route(InsideAuth::current()->dashboard) : '/'
         );
     }
 

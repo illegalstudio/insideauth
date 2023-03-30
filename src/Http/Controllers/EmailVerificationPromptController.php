@@ -22,6 +22,6 @@ class EmailVerificationPromptController extends Controller
             ? redirect()->intended(
                 InsideAuth::current()->dashboard() ? route(InsideAuth::current()->dashboard()) : '/'
             )
-            : view('linky::auth.verify-email');
+            : view('inside_auth::auth.verify-email');
     }
 }

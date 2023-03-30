@@ -18,7 +18,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('linky::profile.edit', [
+        return view('inside_auth::profile.edit', [
             'user' => $request->user(),
         ]);
     }

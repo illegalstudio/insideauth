@@ -21,7 +21,7 @@ class PasswordResetLinkController extends Controller
      */
     public function create(): View
     {
-        return view('linky::auth.forgot-password');
+        return view('inside_auth::auth.forgot-password');
     }
 
     /**

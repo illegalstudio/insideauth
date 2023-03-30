@@ -24,7 +24,7 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('linky::auth.register');
+        return view('inside_auth::auth.register');
     }
 
     /**
@@ -54,7 +54,7 @@ class RegisteredUserController extends Controller
         Auth::guard(InsideAuth::current()->security_guard)->login($user);
 
         return redirect(
-            InsideAuth::current()->dashboard() ? route(InsideAuth::current()->dashboard()) : '/'
+            InsideAuth::current()->dashboard ? route(InsideAuth::current()->dashboard) : '/'
         );
     }
 }

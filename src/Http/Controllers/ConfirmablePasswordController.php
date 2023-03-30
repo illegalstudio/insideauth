@@ -20,7 +20,7 @@ class ConfirmablePasswordController extends Controller
      */
     public function show(): View
     {
-        return view('linky::auth.confirm-password');
+        return view('inside_auth::auth.confirm-password');
     }
 
     /**
@@ -40,7 +40,7 @@ class ConfirmablePasswordController extends Controller
         $request->session()->put('auth.password_confirmed_at', time());
 
         return redirect()->intended(
-            InsideAuth::current()->dashboard() ? route(InsideAuth::current()->dashboard()) : '/'
+            InsideAuth::current()->dashboard ? route(InsideAuth::current()->dashboard) : '/'
         );
     }
 }
