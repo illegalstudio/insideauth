@@ -2,7 +2,6 @@
 
 namespace Illegal\InsideAuth\Providers;
 
-use Illegal\InsideAuth\InsideAuth;
 use Illegal\InsideAuth\Passwords\PasswordBrokerManager;
 use Illegal\InsideAuth\Registrators\Registrator;
 use Illuminate\Foundation\Application;
@@ -26,6 +25,7 @@ class ServiceProvider extends IlluminateServiceProvider
         $this->mergeConfigurations();
         $this->loadMigrations();
         $this->loadViews();
+        $this->assetsPublishing();
     }
 
     /**
@@ -72,5 +72,14 @@ class ServiceProvider extends IlluminateServiceProvider
     private function loadViews(): void
     {
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'inside_auth');
+    }
+
+    private function assetsPublishing(): void
+    {
+        if($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__ . '/../../public/build' => public_path('vendor/illegal/inside_auth'),
+            ], ['illegal-assets', 'inside-auth-assets', 'laravel-assets']);
+        }
     }
 }

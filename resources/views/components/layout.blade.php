@@ -3,7 +3,7 @@
     <title>Laravel InsideAuth</title>
 
 
-    @vite('resources/js/app.js', 'vendor/illegal/insideauth')
+    @vite('resources/js/app.js', 'vendor/illegal/inside_auth')
 </head>
 <body>
 
