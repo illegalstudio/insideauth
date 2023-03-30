@@ -46,8 +46,6 @@ class ServiceProvider extends IlluminateServiceProvider
         $this->app->singleton(Registrator::class, function (Application $app) {
             return new Registrator();
         });
-
-        $this->app->alias('InsideAuth', InsideAuth::class);
     }
 
     /**
