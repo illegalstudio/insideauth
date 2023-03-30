@@ -32,7 +32,10 @@
     "autoload": {
         "psr-4": {
             "Illegal\\InsideAuth\\": "src/"
-        }
+        },
+        "files": [
+            "functions/insideauth.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
