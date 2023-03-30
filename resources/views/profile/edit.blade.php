@@ -24,6 +24,12 @@
                     @include('inside_auth::profile.partials.delete-user-form')
                 </div>
             </div>
+
+            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                <div class="max-w-xl">
+                    @include('inside_auth::profile.partials.logout')
+                </div>
+            </div>
         </div>
     </div>
 </x-inside_auth::layout>
