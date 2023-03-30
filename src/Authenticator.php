@@ -138,34 +138,42 @@ class Authenticator
 
     /**
      * Disable registration
+     *
+     * @param bool $without Whether to disable registration
      */
-    public function withoutRegistration(): static
+    public function withoutRegistration(bool $without = true): static
     {
-        return $this->set('registration_enabled', false);
+        return $this->set('registration_enabled', !$without);
     }
 
     /**
      * Disable forgot password
+     *
+     * @param bool $without Whether to disable forgot password
      */
-    public function withoutForgotPassword(): static
+    public function withoutForgotPassword(bool $without = true): static
     {
-        return $this->set('forgot_password_enabled', false);
+        return $this->set('forgot_password_enabled', !$without);
     }
 
     /**
      * Disable email verification
+     *
+     * @param bool $without Whether to disable email verification
      */
-    public function withoutEmailVerification(): static
+    public function withoutEmailVerification(bool $without = true): static
     {
-        return $this->set('email_verification_enabled', false);
+        return $this->set('email_verification_enabled', !$without);
     }
 
     /**
      * Disable user profile
+     *
+     * @param bool $without Whether to disable user profile
      */
-    public function withoutUserProfile(): static
+    public function withoutUserProfile(bool $without = true): static
     {
-        return $this->set('user_profile_enabled', false);
+        return $this->set('user_profile_enabled', !$without);
     }
 
     /**
