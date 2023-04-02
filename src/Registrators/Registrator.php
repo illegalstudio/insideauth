@@ -24,7 +24,7 @@ final class Registrator
      * It will be populate by the InjectIntoApplication middleware
      * @see \Illegal\InsideAuth\Http\Middleware\InjectIntoApplication
      */
-    private Authenticator $current;
+    private ?Authenticator $current = null;
 
     /**
      * The registrators list, used to register the routes, the middlewares, the config, etc.
@@ -100,5 +100,10 @@ final class Registrator
     public function current(): Authenticator
     {
         return $this->current;
+    }
+
+    public function booted(): bool
+    {
+        return filled($this->current);
     }
 }

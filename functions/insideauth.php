@@ -12,3 +12,8 @@ function insideauth(): Authenticator
 {
     return InsideAuth::current();
 }
+
+function insideauth_booted(): bool
+{
+    return InsideAuth::booted();
+}
