@@ -87,17 +87,29 @@ Listed below are all the functions that can be utilized to customize the authent
 
 ```php
 \Illegal\InsideAuth\InsideAuth::boot('myproject')
-    ->withoutRegister()
-    ->withoutForgotPassword()
-    ->withoutEmailVerification()
-    ->withoutUserProfile()
-    ->withDashboard('my_dashboard_route')
-    ->withConfirmPasswordTemplate('my_confirm_password_template')
-    ->withForgotPasswordTemplate('my_forgot_password_template')
-    ->withLoginTemplate('my_login_template')
-    ->withRegisterTemplate('my_register_template')
-    ->withResetPasswordTemplate('my_reset_password_template')
-    ->withVerifyEmailTemplate('my_verify_email_template')
+    // Disable Registration. You can pass a boolean value. This will disable registration if the value is true.
+    ->withoutRegistration() 
+    // Disable Forgot Password. You can pass a boolean value. This will disable forgot password if the value is true.
+    ->withoutForgotPassword() 
+    // Disable Email Verification. You can pass a boolean value. This will disable email verification if the value is true.
+    ->withoutEmailVerification() 
+    // Disable User Profile. You can pass a boolean value. This will disable user profile if the value is true.
+    ->withoutUserProfile() 
+    // This will set the dashboard route, the user will be redirected to after login.
+    ->withDashboard('my_dashboard_route') 
+    // The template for the confirm password page.
+    ->withConfirmPasswordTemplate('my_confirm_password_template') 
+    // The template for the forgot password page.
+    ->withForgotPasswordTemplate('my_forgot_password_template') 
+    // The template for the login page.
+    ->withLoginTemplate('my_login_template') 
+    // The template for the register page.
+    ->withRegisterTemplate('my_register_template') 
+    // The template for the reset password page.
+    ->withResetPasswordTemplate('my_reset_password_template') 
+    // The template for the verify email page.
+    ->withVerifyEmailTemplate('my_verify_email_template') 
+    // The template for the user profile page.
     ->withProfileEditTemplate('my_profile_edit_template');
 
 ```
@@ -130,6 +142,8 @@ Route::middleware([
     // ...
 });
 ```
+
+See the [Security](#security) section for more details.
 
 **Via the InsideAuth facade**
 
@@ -205,7 +219,7 @@ $auth->security_password_broker     // The name of the password broker
 To secure your routes, simply apply the appropriate middlewares provided by InsideAuth.
 
 ```php
-Route::middleware(insideauth()->middleware_verified)->group(function () {
+Route::middleware(Illegal\InsideAuth\InsideAuth::getAuthenticator('myproject')->middleware_verified)->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     });
@@ -217,7 +231,10 @@ It's crucial that your routes use the standard `web` middleware.
 If you do not already have this middleware included, you can make use of the one provided by InsideAuth.
 
 ```php
-Route::middleware([insideauth()->middleware_web, insideauth()->middleware_verified])->group(function () {
+Route::middleware([
+    \Illegal\InsideAuth\InsideAuth::getAuthenticator('myproject')->middleware_web,
+    \Illegal\InsideAuth\InsideAuth::getAuthenticator('myproject')->middleware_verified,
+])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     });
