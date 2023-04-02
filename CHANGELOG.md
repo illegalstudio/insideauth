@@ -2,6 +2,10 @@
 
 - Support for themes
 
+# 0.2.8
+
+Fixed UserDelete event not being fired.
+
 # 0.2.7
 
 Fixed the route of the profile destroy action.
