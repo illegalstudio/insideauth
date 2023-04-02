@@ -9,11 +9,12 @@ use Illuminate\Support\Collection;
  * It will be available during the lifecycle of the request.
  *
  * Internal params:
+ * @property bool $enabled Whether the auth is enabled
+ * @property bool $registration_enabled Whether registration is enabled
+ * @property bool $forgot_password_enabled Whether forgot password is enabled
+ * @property bool $email_verification_enabled Whether email verification is enabled
+ * @property bool $user_profile_enabled Whether the user profile is enabled
  * @property string $dashboard The name of the dashboard route
- * @property string $registration_enabled Whether registration is enabled
- * @property string $forgot_password_enabled Whether forgot password is enabled
- * @property string $email_verification_enabled Whether email verification is enabled
- * @property string $user_profile_enabled Whether the user profile is enabled
  * @property string $template_confirm_password The name of the confirm password template
  * @property string $template_forgot_password The name of the forgot password template
  * @property string $template_login The name of the login template
@@ -65,11 +66,12 @@ class Authenticator
     public function __construct(private readonly string $name)
     {
         $this->parameters = Collection::make([
-            'dashboard'                  => null,
+            'enabled'                    => true,
             'registration_enabled'       => true,
             'forgot_password_enabled'    => true,
             'email_verification_enabled' => true,
             'user_profile_enabled'       => true,
+            'dashboard'                  => null,
             'template_confirm_password'  => 'inside_auth::auth.confirm-password',
             'template_forgot_password'   => 'inside_auth::auth.forgot-password',
             'template_login'             => 'inside_auth::auth.login',
@@ -129,11 +131,11 @@ class Authenticator
     ###############################################
 
     /**
-     * Set the dashboard route
+     * Enable/Disable the auth
      */
-    public function withDashboard(string $dashboard): static
+    public function enabled(bool $enabled = true): static
     {
-        return $this->set('dashboard', $dashboard);
+        return $this->set('enabled', $enabled);
     }
 
     /**
@@ -174,6 +176,14 @@ class Authenticator
     public function withoutUserProfile(bool $without = true): static
     {
         return $this->set('user_profile_enabled', !$without);
+    }
+
+    /**
+     * Set the dashboard route
+     */
+    public function withDashboard(string $dashboard): static
+    {
+        return $this->set('dashboard', $dashboard);
     }
 
     /**

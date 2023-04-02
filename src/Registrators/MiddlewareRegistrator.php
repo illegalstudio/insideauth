@@ -5,6 +5,7 @@ namespace Illegal\InsideAuth\Registrators;
 use Illegal\InsideAuth\Authenticator;
 use Illegal\InsideAuth\Contracts\RegistratorInterface;
 use Illegal\InsideAuth\Http\Middleware\Authenticate;
+use Illegal\InsideAuth\Http\Middleware\EnsureAuthIsEnabled;
 use Illegal\InsideAuth\Http\Middleware\EnsureEmailIsVerified;
 use Illegal\InsideAuth\Http\Middleware\InjectIntoApplication;
 use Illegal\InsideAuth\Http\Middleware\RedirectIfAuthenticated;
@@ -24,6 +25,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
  * @property string $web
  * @property string $authenticated
  * @property string $ensure_verified
+ * @property string $ensure_enabled
  * @property string $inject
  * @property string $redirect_authenticated
  */
@@ -46,6 +48,7 @@ class MiddlewareRegistrator implements RegistratorInterface
             'web'                    => $this->authenticator->name() . '-web',
             'authenticated'          => $this->authenticator->name() . '-authenticated',
             'ensure_verified'        => $this->authenticator->name() . '-ensure-email-is-verified',
+            'ensure_enabled'         => $this->authenticator->name() . '-ensure-auth-is-enabled',
             'inject'                 => $this->authenticator->name() . '-inject',
             'redirect_authenticated' => $this->authenticator->name() . '-redirect-if-authenticated',
         ]);
@@ -53,6 +56,7 @@ class MiddlewareRegistrator implements RegistratorInterface
         $this->authenticator->merge($this->parameters->except([
             'authenticated',
             'ensure_verified',
+            'ensure_enabled',
             'inject',
             'redirect_authenticated'
         ])->mapWithKeys(fn($value, $key) => [$prefix . '_' . $key => $value]));
@@ -80,6 +84,7 @@ class MiddlewareRegistrator implements RegistratorInterface
          */
         Route::aliasMiddleware($this->authenticated, Authenticate::class);
         Route::aliasMiddleware($this->ensure_verified, EnsureEmailIsVerified::class);
+        Route::aliasMiddleware($this->ensure_enabled, EnsureAuthIsEnabled::class);
         Route::aliasMiddleware($this->redirect_authenticated, RedirectIfAuthenticated::class);
         Route::aliasMiddleware($this->inject, InjectIntoApplication::class);
 
@@ -100,6 +105,7 @@ class MiddlewareRegistrator implements RegistratorInterface
          */
         Route::middlewareGroup($this->guest, [
             $this->inject . ':' . $this->authenticator->name(),
+            $this->ensure_enabled,
             $this->redirect_authenticated
         ]);
 
@@ -109,6 +115,7 @@ class MiddlewareRegistrator implements RegistratorInterface
          */
         Route::middlewareGroup($this->logged_in, [
             $this->inject . ':' . $this->authenticator->name(),
+            $this->ensure_enabled,
             $this->authenticated . ':' . $this->authenticator->route_login . ',' . $this->authenticator->security_guard
         ]);
 
