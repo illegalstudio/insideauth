@@ -108,6 +108,29 @@ Typically, you will need to access the routes and middlewares for the authentica
 
 There are several methods for accessing the current Authenticator instance.
 
+**Requesting a specific Authenticator instance**
+
+```php
+$auth = InsideAuth::getAuthenticator('myproject');
+```
+
+`myproject` is the name of the authentication set you provided to the boot method.
+
+Since the current authenticator is injected though a middleware, this
+is the only method to access the current authenticator before the requests starts. For
+example in a Service Provider.
+
+This is the typical method you will use to protect your routes.
+
+```php
+Route::middleware([
+    InsideAuth::getAuthenticator('myproject')->middleware_web,
+    InsideAuth::getAuthenticator('myproject')->middleware_verified,
+])->group(function () {
+    // ...
+});
+```
+
 **Via the InsideAuth facade**
 
 ```php
