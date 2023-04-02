@@ -84,7 +84,7 @@ class RouteRegistrator implements RegistratorInterface
      */
     public function boot(): void
     {
-        Route::prefix($this->authenticator->name() . '/auth')->middleware($this->authenticator->middleware_web)->group(function () {
+        Route::prefix($this->authenticator->name())->middleware($this->authenticator->middleware_web)->group(function () {
             /**
              * Routes that are accessible to guests users
              */
@@ -125,7 +125,7 @@ class RouteRegistrator implements RegistratorInterface
      */
     private function registerRegisterRoutes(): void
     {
-        Route::middleware(EnsureRegistrationIsEnabled::class)->group(function() {
+        Route::middleware(EnsureRegistrationIsEnabled::class)->group(function () {
             Route::get('register', [RegisteredUserController::class, 'create'])->name($this->register);
             Route::post('register', [RegisteredUserController::class, 'store']);
         });
@@ -136,7 +136,7 @@ class RouteRegistrator implements RegistratorInterface
      */
     private function registerForgotPasswordRoutes(): void
     {
-        Route::middleware(EnsureForgotPasswordIsEnabled::class)->group(function() {
+        Route::middleware(EnsureForgotPasswordIsEnabled::class)->group(function () {
             Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name($this->password_request);
             Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])->name($this->password_email);
 
@@ -158,7 +158,7 @@ class RouteRegistrator implements RegistratorInterface
      */
     public function registerEmailVerificationRoutes(): void
     {
-        Route::middleware(EnsureEmailVerificationIsEnabled::class)->group(function() {
+        Route::middleware(EnsureEmailVerificationIsEnabled::class)->group(function () {
             Route::get('verify-email', EmailVerificationPromptController::class)->name($this->verification_notice);
             Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
                 ->middleware(['signed', 'throttle:6,1'])
