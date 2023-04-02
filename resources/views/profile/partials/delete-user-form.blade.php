@@ -15,7 +15,7 @@
     >{{ __('Delete Account') }}</x-inside_auth::danger-button>
 
     <x-inside_auth::modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable="">
-        <form method="post" action="{{ insideauth()->route_profile_destroy }}" class="p-6">
+        <form method="post" action="{{ route(insideauth()->route_profile_destroy) }}" class="p-6">
             @csrf
             @method('delete')
 
