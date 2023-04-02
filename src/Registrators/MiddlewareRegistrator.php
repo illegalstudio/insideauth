@@ -40,7 +40,7 @@ class MiddlewareRegistrator implements RegistratorInterface
     public function __construct(private readonly Authenticator $authenticator, string $prefix = 'middleware')
     {
         $this->parameters = collect([
-            'verified'               => $this->authenticator->name(),
+            'verified'               => $this->authenticator->name() . '-verified',
             'guest'                  => $this->authenticator->name() . '-guest',
             'logged_in'              => $this->authenticator->name() . '-logged',
             'web'                    => $this->authenticator->name() . '-web',
