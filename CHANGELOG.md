@@ -2,6 +2,14 @@
 
 - Support for themes
 
+# 0.2.7
+
+Fixed the route of the profile destroy action.
+
+# 0.2.6
+
+Simplified route prefixing.
+
 # 0.2.5
 
 Added parameters to all without* methods to allow for more flexibility.  
