@@ -3,6 +3,11 @@
     "description": "Laravel InsideAuth is a seamless side authentication solution for Laravel packages.",
     "type": "library",
     "license": "MIT",
+    "support": {
+        "source": "https://github.com/illegalstudio/insideauth",
+        "issues": "https://github.com/illegalstudio/insideauth/issues",
+        "docs": "https://github.com/illegalstudio/insideauth/blob/main/README.md"
+    },
     "authors": [
         {
             "name": "Vincenzo Petrucci",
