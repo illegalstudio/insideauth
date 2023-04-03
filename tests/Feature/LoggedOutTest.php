@@ -65,3 +65,32 @@ it('shouldn\'t expose profile', function () {
     $this->get(route($this->auth()->route_profile_destroy))
         ->assertRedirect(route($this->auth()->route_login));
 });
+
+/**
+ * Reset password page should be available, also with a wrong token
+ */
+it('should expose reset password', function () {
+    $this->get(route($this->auth()->route_password_reset, ['token' => 'wrong']))
+        ->assertOk() // Should be 200
+        ->assertSee('Email') // Email field should be present
+        ->assertSee('Password') // Password field should be present
+        ->assertSee('Confirm Password') // Confirm Password field should be present
+        ->assertSee('Reset Password') // Reset Password button should be present
+    ;
+});
+
+/**
+ * Verification notice should redirect to login
+ */
+it('should redirect verification notice to login', function () {
+    $this->get(route($this->auth()->route_verification_notice))
+        ->assertRedirect(route($this->auth()->route_login));
+});
+
+/**
+ * Verification verify should redirect to login if id and hash are wrong
+ */
+it('should redirect verification verify to login if id and hash are wrong', function () {
+    $this->get(route($this->auth()->route_verification_verify, ['id' => 1, 'hash' => 'wrong']))
+        ->assertRedirect(route($this->auth()->route_login));
+});
