@@ -11,7 +11,7 @@
 |
 */
 
-uses(Tests\TestCase::class)->in('Feature');
+uses(Illegal\InsideAuth\Tests\TestCase::class)->in('Feature');
 
 /*
 |--------------------------------------------------------------------------
