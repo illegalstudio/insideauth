@@ -33,7 +33,8 @@
         "phpunit/phpunit": "^10.0",
         "pestphp/pest-plugin-mock": "^2.0",
         "orchestra/testbench": "^8.0",
-        "spatie/laravel-ray": "^1.32"
+        "spatie/laravel-ray": "^1.32",
+        "nunomaduro/larastan": "^2.0"
     },
     "autoload": {
         "psr-4": {
