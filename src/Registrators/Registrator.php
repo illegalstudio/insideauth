@@ -63,7 +63,7 @@ final class Registrator
         $authenticator = new Authenticator($name);
 
         collect($this->registrators)
-            ->map(function ($registrator, $category) use ($authenticator, $name) {
+            ->map(function ($registrator, $category) use ($authenticator) {
                 return new $registrator($authenticator, $category);
             })->map(function (RegistratorInterface $registrator) {
                 $registrator->boot();
