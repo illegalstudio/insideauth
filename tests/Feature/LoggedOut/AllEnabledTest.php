@@ -39,8 +39,16 @@ it('exposes forgot password',   fn() => $this->exposes->forgotPassword());
 it('exposes reset password',    fn() => $this->exposes->resetPassword());
 
 /**
+ * Has the correct links in the various views
+ */
+it('has register in login',         fn() => $this->has->registerInLogin());
+it('has password request in login', fn() => $this->has->passwordRequestInLogin());
+it('has login in register',         fn() => $this->has->loginInRegister());
+
+/**
  * Correcly redirects to login protected routes
  */
+it('redirects dashboard to login',              fn() => $this->redirects->dashboardToLogin());
 it('redirects verification notice to login',    fn() => $this->redirects->verificatioNoticeToLogin());
 it('redirects verification verify to login',    fn() => $this->redirects->verificationVerifyToLogin());
 it('redirects profile to login',                fn() => $this->redirects->profileToLogin());

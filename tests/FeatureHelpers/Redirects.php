@@ -12,6 +12,15 @@ final class Redirects
     }
 
     /**
+     * The dashboard should redirect to login
+     */
+    public function dashboardToLogin(): void
+    {
+        get(route('dashboard'))
+            ->assertRedirect(route($this->auth->route_login));
+    }
+
+    /**
      * The Verification notice should redirect to login
      */
     public function verificatioNoticeToLogin(): void

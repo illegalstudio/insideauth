@@ -31,8 +31,6 @@ final class Exposes
             ->assertSee('name="email"', false) // Email field should be present
             ->assertSee('name="password"', false) // Password field should be present
             ->assertSee('type="submit"', false) // Login button should be present
-            ->assertSee(route($this->auth->route_password_request)) // Reset Password link should be present
-            ->assertSee(route($this->auth->route_register)) // Register link should be present
         ;
     }
 
@@ -48,7 +46,6 @@ final class Exposes
             ->assertSee('name="password"', false) // Password field should be present
             ->assertSee('name="password_confirmation"', false) // Confirm Password field should be present
             ->assertSee('type="submit"', false) // Register button should be present
-            ->assertSee(route($this->auth->route_login)) // Login link should be present
         ;
     }
 
