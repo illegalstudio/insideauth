@@ -14,10 +14,14 @@ use Illegal\InsideAuth\Tests\FeatureHelpers\Providers\AuthServiceProvider;
 use Illegal\InsideAuth\Tests\FeatureHelpers\Providers\RouteServiceProvider;
 use Illegal\InsideAuth\Tests\FeatureHelpers\Redirects;
 use Illegal\InsideAuth\Tests\FeatureHelpers\Routes;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 abstract class FeatureTestCase extends TestCase
 {
+    use RefreshDatabase;
 
     protected Exposes   $exposes;
     protected Redirects $redirects;
@@ -64,5 +68,21 @@ abstract class FeatureTestCase extends TestCase
             AuthServiceProvider::class,
             RouteServiceProvider::class
         ];
+    }
+
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    protected function getEnvironmentSetUp($app)
+    {
+        $config = $app->get('config');
+        $config->set('logging.default', 'errorlog');
+        $config->set('database.default', 'testbench');
+        $config->set('database.connections.testbench', [
+            'driver'   => 'sqlite',
+            'database' => ':memory:',
+            'prefix'   => '',
+        ]);
     }
 }
