@@ -3,6 +3,7 @@
 namespace Illegal\InsideAuth\Models;
 
 use Illegal\InsideAuth\Events\UserDeleted;
+use Illegal\InsideAuth\Factories\UserFactory;
 use Illegal\InsideAuth\InsideAuth;
 use Illegal\LaravelUtils\Contracts\HasPrefix;
 use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
@@ -124,5 +125,13 @@ class User extends Authenticatable implements MustVerifyEmail
         };
 
         $this->notify($notification);
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): UserFactory
+    {
+        return UserFactory::new();
     }
 }
