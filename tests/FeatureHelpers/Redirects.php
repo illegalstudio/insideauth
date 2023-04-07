@@ -3,11 +3,12 @@
 namespace Illegal\InsideAuth\Tests\FeatureHelpers;
 
 use Illegal\InsideAuth\Authenticator;
+use Illegal\InsideAuth\Models\User;
 use function Pest\Laravel\get;
 
 final class Redirects
 {
-    public function __construct(private readonly Authenticator $auth)
+    public function __construct(private readonly Authenticator $auth, private readonly ?User $user = null)
     {
     }
 

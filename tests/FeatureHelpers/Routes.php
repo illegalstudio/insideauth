@@ -3,10 +3,11 @@
 namespace Illegal\InsideAuth\Tests\FeatureHelpers;
 
 use Illegal\InsideAuth\Authenticator;
+use Illegal\InsideAuth\Models\User;
 
 final class Routes
 {
-    public function __construct(private readonly Authenticator $auth)
+    public function __construct(private readonly Authenticator $auth, private readonly ?User $user = null)
     {
     }
 
