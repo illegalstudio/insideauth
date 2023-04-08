@@ -52,7 +52,7 @@ test('test', function () {
         ;
 
         return true;
-    });
+    })->times(5);
 
     Route::shouldReceive('middlewareGroup');
 
