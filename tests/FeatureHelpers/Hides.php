@@ -47,4 +47,43 @@ final class Hides extends Helper
         ;
     }
 
+    /**
+     * The dashboard - defined in the test suite - should not be available
+     */
+    public function dashboard(): void
+    {
+        $this->testCase()->get(route('dashboard'))
+            ->assertNotFound() // Should be 404
+        ;
+    }
+
+    /**
+     * Hides the verification notice route
+     */
+    public function verificationNotice(): void
+    {
+        $this->testCase()->get(route($this->auth->route_verification_notice))
+            ->assertNotFound() // Should be 404
+        ;
+    }
+
+    /**
+     * Hides the verification send route
+     */
+    public function verificationSend(): void
+    {
+        $this->testCase()->post(route($this->auth->route_verification_send))
+            ->assertNotFound() // Should be 404
+        ;
+    }
+
+    /**
+     * Hides the verification verify route
+     */
+    public function verificationVerify(): void
+    {
+        $this->testCase()->get(route($this->auth->route_verification_verify, ['id' => 1, 'hash' => 'wrong']))
+            ->assertNotFound() // Should be 404
+        ;
+    }
 }

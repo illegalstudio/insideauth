@@ -90,4 +90,22 @@ final class Redirects extends Helper
         $this->testCase()->get(route($this->auth->route_password_reset, ['token' => 'wrong']))
             ->assertRedirect(route('dashboard'));
     }
+
+    /**
+     * The dashboard should redirect to verification notice if not verified
+     */
+    public function dashboardToVerificationNotice(): void
+    {
+        $this->testCase()->get(route('dashboard'))
+            ->assertRedirect(route($this->auth->route_verification_notice));
+    }
+
+    /**
+     * The profile should redirect to verification notice if not verified
+     */
+    public function profileToVerificationNotice(): void
+    {
+        $this->testCase()->get(route($this->auth->route_profile_edit))
+            ->assertRedirect(route($this->auth->route_verification_notice));
+    }
 }

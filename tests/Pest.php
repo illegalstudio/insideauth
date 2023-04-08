@@ -1,6 +1,8 @@
 <?php
 
-use Illegal\InsideAuth\Models\User;
+use Illegal\InsideAuth\Tests\LoggedInFeatureTestCase;
+use Illegal\InsideAuth\Tests\LoggedOutFeatureTestCase;
+use Illegal\InsideAuth\Tests\UnverifiedFeatureTestCase;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,8 +15,9 @@ use Illegal\InsideAuth\Models\User;
 |
 */
 
-uses(Illegal\InsideAuth\Tests\LoggedOutFeatureTestCase::class)->in('Feature/LoggedOut');
-uses(Illegal\InsideAuth\Tests\LoggedInFeatureTestCase::class)->in('Feature/LoggedIn');
+uses(LoggedOutFeatureTestCase::class)->in('Feature/LoggedOut');
+uses(LoggedInFeatureTestCase::class)->in('Feature/LoggedIn');
+uses(UnverifiedFeatureTestCase::class)->in('Feature/Unverified');
 
 /*
 |--------------------------------------------------------------------------

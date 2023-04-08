@@ -72,6 +72,26 @@ final class Exposes extends Helper
     }
 
     /**
+     * Verification notice should be available
+     */
+    public function verificatioNotice(): void
+    {
+        $this->testCase()->get(route($this->auth->route_verification_notice))
+            ->assertOk() // Should be 200
+        ;
+    }
+
+    /**
+     * The Verification verify page should be available
+     */
+    public function verificationVerify(): void
+    {
+        $this->testCase()->get(route($this->auth->route_verification_verify, ['id' => 1, 'hash' => 'wrong']))
+            ->assertOk() // Should be 200
+        ;
+    }
+
+    /**
      * The Verification verify page should return a 403 error
      */
     public function errorPageOnVerificationVerify(): void
@@ -81,6 +101,9 @@ final class Exposes extends Helper
         ;
     }
 
+    /**
+     * The profile should be available
+     */
     public function profile(): void
     {
         $this->testCase()->get(route($this->auth->route_profile_edit))

@@ -13,16 +13,17 @@ use Illegal\InsideAuth\Tests\FeatureHelpers\Providers\AuthServiceProvider;
 use Illegal\InsideAuth\Tests\FeatureHelpers\Redirects;
 use Illegal\InsideAuth\Tests\FeatureHelpers\Routes;
 
-class LoggedInFeatureTestCase extends LoggedOutFeatureTestCase
+class UnverifiedFeatureTestCase extends LoggedOutFeatureTestCase
 {
-
     /**
      * Boot the authentication
      * @throws Exception
      */
     protected function bootAuth(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'email_verified_at' => null,
+        ]);
 
         $authenticator   = InsideAuth::getAuthenticator(AuthServiceProvider::AUTH_NAME);
         $this->exposes   = new Exposes($authenticator, $user);
@@ -32,4 +33,5 @@ class LoggedInFeatureTestCase extends LoggedOutFeatureTestCase
         $this->hasNot    = new HasNot($authenticator, $user);
         $this->hides     = new Hides($authenticator, $user);
     }
+
 }
