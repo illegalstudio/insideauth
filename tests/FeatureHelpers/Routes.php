@@ -2,15 +2,10 @@
 
 namespace Illegal\InsideAuth\Tests\FeatureHelpers;
 
-use Illegal\InsideAuth\Authenticator;
-use Illegal\InsideAuth\Models\User;
+use Illegal\InsideAuth\Tests\FeatureHelpers\Contracts\Helper;
 
-final class Routes
+final class Routes extends Helper
 {
-    public function __construct(private readonly Authenticator $auth, private readonly ?User $user = null)
-    {
-    }
-
     /**
      * The route to the dummy dashboard is correct
      */
@@ -31,6 +26,9 @@ final class Routes
         )->toBe('/' . $this->auth->name() . '/login');
     }
 
+    /**
+     * The route to logout is correct
+     */
     public function toLogout(): void
     {
         expect(
@@ -38,6 +36,9 @@ final class Routes
         )->toBe('/' . $this->auth->name() . '/logout');
     }
 
+    /**
+     * The route to register is correct
+     */
     public function toRegister(): void
     {
         expect(
@@ -45,6 +46,9 @@ final class Routes
         )->toBe('/' . $this->auth->name() . '/register');
     }
 
+    /**
+     * The route to the password confirm is correct
+     */
     public function toPasswordConfirm(): void
     {
         expect(
@@ -52,6 +56,9 @@ final class Routes
         )->toBe('/' . $this->auth->name() . '/confirm-password');
     }
 
+    /**
+     * The route to the password request is correct
+     */
     public function toPasswordRequest(): void
     {
         expect(
@@ -59,6 +66,9 @@ final class Routes
         )->toBe('/' . $this->auth->name() . '/forgot-password');
     }
 
+    /**
+     * The route to the password email is correct
+     */
     public function toPasswordEmail(): void
     {
         expect(
@@ -66,6 +76,9 @@ final class Routes
         )->toBe('/' . $this->auth->name() . '/forgot-password');
     }
 
+    /**
+     * The route to the password update is correct
+     */
     public function toPasswordUpdate(): void
     {
         expect(
@@ -73,6 +86,9 @@ final class Routes
         )->toBe('/' . $this->auth->name() . '/password');
     }
 
+    /**
+     * The route to the password store is correct
+     */
     public function toPasswordStore(): void
     {
         expect(
@@ -80,6 +96,9 @@ final class Routes
         )->toBe('/' . $this->auth->name() . '/reset-password');
     }
 
+    /**
+     * The route to the password reset is correct
+     */
     public function toPasswordReset(): void
     {
         expect(
@@ -87,6 +106,9 @@ final class Routes
         )->toBe('/' . $this->auth->name() . '/reset-password/test');
     }
 
+    /**
+     * The route to the profile edit is correct
+     */
     public function toProfileEdit(): void
     {
         expect(
@@ -94,6 +116,9 @@ final class Routes
         )->toBe('/' . $this->auth->name() . '/profile');
     }
 
+    /**
+     * The route to the profile update is correct
+     */
     public function toProfileUpdate(): void
     {
         expect(
@@ -101,6 +126,9 @@ final class Routes
         )->toBe('/' . $this->auth->name() . '/profile');
     }
 
+    /**
+     * The route to the profile destroy is correct
+     */
     public function toProfileDestroy(): void
     {
         expect(
@@ -108,6 +136,9 @@ final class Routes
         )->toBe('/' . $this->auth->name() . '/profile');
     }
 
+    /**
+     * The route to the verification send is correct
+     */
     public function toVerificationSend(): void
     {
         expect(
@@ -115,6 +146,9 @@ final class Routes
         )->toBe('/' . $this->auth->name() . '/email/verification-notification');
     }
 
+    /**
+     * The route to the verification notice is correct
+     */
     public function toVerificationNotice(): void
     {
         expect(
@@ -122,6 +156,9 @@ final class Routes
         )->toBe('/' . $this->auth->name() . '/verify-email');
     }
 
+    /**
+     * The route to the verification verify is correct
+     */
     public function toVerificationVerify(): void
     {
         expect(

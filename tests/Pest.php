@@ -1,5 +1,7 @@
 <?php
 
+use Illegal\InsideAuth\Models\User;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -11,7 +13,8 @@
 |
 */
 
-uses(Illegal\InsideAuth\Tests\FeatureTestCase::class)->in('Feature');
+uses(Illegal\InsideAuth\Tests\LoggedOutFeatureTestCase::class)->in('Feature/LoggedOut');
+uses(Illegal\InsideAuth\Tests\LoggedInFeatureTestCase::class)->in('Feature/LoggedIn');
 
 /*
 |--------------------------------------------------------------------------

@@ -2,22 +2,17 @@
 
 namespace Illegal\InsideAuth\Tests\FeatureHelpers;
 
-use Illegal\InsideAuth\Authenticator;
-use Illegal\InsideAuth\Models\User;
+use Illegal\InsideAuth\Tests\FeatureHelpers\Contracts\Helper;
 use function Pest\Laravel\get;
 
-final class Redirects
+final class Redirects extends Helper
 {
-    public function __construct(private readonly Authenticator $auth, private readonly ?User $user = null)
-    {
-    }
-
     /**
      * The dashboard should redirect to login
      */
     public function dashboardToLogin(): void
     {
-        get(route('dashboard'))
+        $this->testCase()->get(route('dashboard'))
             ->assertRedirect(route($this->auth->route_login));
     }
 
@@ -26,7 +21,7 @@ final class Redirects
      */
     public function verificatioNoticeToLogin(): void
     {
-        get(route($this->auth->route_verification_notice))
+        $this->testCase()->get(route($this->auth->route_verification_notice))
             ->assertRedirect(route($this->auth->route_login));
     }
 
@@ -35,7 +30,7 @@ final class Redirects
      */
     public function verificationVerifyToLogin(): void
     {
-        get(route($this->auth->route_verification_verify, ['id' => 1, 'hash' => 'wrong']))
+        $this->testCase()->get(route($this->auth->route_verification_verify, ['id' => 1, 'hash' => 'wrong']))
             ->assertRedirect(route($this->auth->route_login));
     }
 
@@ -44,11 +39,55 @@ final class Redirects
      */
     public function profileToLogin(): void
     {
-        get(route($this->auth->route_profile_edit))
+        $this->testCase()->get(route($this->auth->route_profile_edit))
             ->assertRedirect(route($this->auth->route_login));
-        get(route($this->auth->route_profile_update))
+        $this->testCase()->get(route($this->auth->route_profile_update))
             ->assertRedirect(route($this->auth->route_login));
-        get(route($this->auth->route_profile_destroy))
+        $this->testCase()->get(route($this->auth->route_profile_destroy))
             ->assertRedirect(route($this->auth->route_login));
+    }
+    /**
+     * The login should redirect to dashboard if logged in
+     */
+    public function loginToDashboard(): void
+    {
+        $this->testCase()->get(route($this->auth->route_login))
+            ->assertRedirect(route('dashboard'));
+    }
+
+    /**
+     * The register should redirect to dashboard if logged in
+     */
+    public function registerToDashboard(): void
+    {
+        $this->testCase()->get(route($this->auth->route_register))
+            ->assertRedirect(route('dashboard'));
+    }
+
+    /**
+     * The verification notice should redirect to dashboard if logged in
+     */
+    public function verificatioNoticeToDashboard(): void
+    {
+        $this->testCase()->get(route($this->auth->route_verification_notice))
+            ->assertRedirect(route('dashboard'));
+    }
+
+    /**
+     * The verification verify should redirect to dashboard if logged in
+     */
+    public function forgotPasswordToDashboard(): void
+    {
+        $this->testCase()->get(route($this->auth->route_password_request))
+            ->assertRedirect(route('dashboard'));
+    }
+
+    /**
+     * The reset password should redirect to dashboard if logged in
+     */
+    public function resetPasswordToDashboard(): void
+    {
+        $this->testCase()->get(route($this->auth->route_password_reset, ['token' => 'wrong']))
+            ->assertRedirect(route('dashboard'));
     }
 }

@@ -2,22 +2,17 @@
 
 namespace Illegal\InsideAuth\Tests\FeatureHelpers;
 
-use Illegal\InsideAuth\Authenticator;
-use Illegal\InsideAuth\Models\User;
+use Illegal\InsideAuth\Tests\FeatureHelpers\Contracts\Helper;
 use function Pest\Laravel\get;
 
-final class Hides
+final class Hides extends Helper
 {
-    public function __construct(private readonly Authenticator $auth, private readonly ?User $user = null)
-    {
-    }
-
     /**
      * Register should be available
      */
     public function register(): void
     {
-        get(route($this->auth->route_register))
+        $this->testCase()->get(route($this->auth->route_register))
             ->assertNotFound() // Should be 404
         ;
     }
@@ -27,7 +22,7 @@ final class Hides
      */
     public function forgotPassword(): void
     {
-        get(route($this->auth->route_password_request))
+        $this->testCase()->get(route($this->auth->route_password_request))
             ->assertNotFound() // Should be 404
         ;
     }
@@ -37,7 +32,17 @@ final class Hides
      */
     public function resetPassword(): void
     {
-        get(route($this->auth->route_password_reset, ['token' => 'wrong']))
+        $this->testCase()->get(route($this->auth->route_password_reset, ['token' => 'wrong']))
+            ->assertNotFound() // Should be 404
+        ;
+    }
+
+    /**
+     * Profile should not be available
+     */
+    public function profile(): void
+    {
+        $this->testCase()->get(route($this->auth->route_profile_edit))
             ->assertNotFound() // Should be 404
         ;
     }
