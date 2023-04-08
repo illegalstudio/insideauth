@@ -3,6 +3,7 @@
 use Illegal\InsideAuth\Tests\LoggedInFeatureTestCase;
 use Illegal\InsideAuth\Tests\LoggedOutFeatureTestCase;
 use Illegal\InsideAuth\Tests\UnverifiedFeatureTestCase;
+use PHPUnit\Framework\TestCase;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,7 @@ use Illegal\InsideAuth\Tests\UnverifiedFeatureTestCase;
 uses(LoggedOutFeatureTestCase::class)->in('Feature/LoggedOut');
 uses(LoggedInFeatureTestCase::class)->in('Feature/LoggedIn');
 uses(UnverifiedFeatureTestCase::class)->in('Feature/Unverified');
+uses(TestCase::class)->in('Unit');
 
 /*
 |--------------------------------------------------------------------------

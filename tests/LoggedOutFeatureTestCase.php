@@ -5,7 +5,6 @@ namespace Illegal\InsideAuth\Tests;
 use Exception;
 use Illegal\InsideAuth\Authenticator;
 use Illegal\InsideAuth\InsideAuth;
-use Illegal\InsideAuth\Models\User;
 use Illegal\InsideAuth\Providers\ServiceProvider;
 use Illegal\InsideAuth\Tests\FeatureHelpers\Exposes;
 use Illegal\InsideAuth\Tests\FeatureHelpers\Has;
