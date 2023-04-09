@@ -40,13 +40,13 @@ beforeEach(function () {
         return true;
     });
     /** @noinspection PhpDynamicFieldDeclarationInspection */
-    $this->middlewareRegistrator = new MiddlewareRegistrator($authenticator);
+    $this->middlewareRegistrator = (new MiddlewareRegistrator())
+        ->withAuthenticator($authenticator)
+        ->collectAndMergeParameters();
 });
 
 test('middleware registrators handles boot correctly', function () {
     Route::shouldReceive('aliasMiddleware')->withArgs(function ($alias, $class) {
-
-        ray(expect($alias));
 
         expect($alias)->toBeIn([
             'auth-authenticated',
