@@ -87,8 +87,7 @@ class RouteRegistrator extends AbstractRegistrator
      */
     public function boot(Collection $allParameters): void
     {
-        /** @noinspection PhpUndefinedMethodInspection */
-        $this->router->prefix($this->authName)->middleware($allParameters->get('middleware_web'))->group(function () use ($allParameters) {
+        $this->router->middleware($allParameters->get('middleware_web'))->prefix($this->authName)->group(function () use ($allParameters) {
             /**
              * Routes that are accessible to guests users
              */
