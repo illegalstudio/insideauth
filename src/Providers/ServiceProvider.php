@@ -15,6 +15,7 @@ class ServiceProvider extends IlluminateServiceProvider
     public function register()
     {
         $this->registerSingletons();
+        $this->bindServices();
     }
 
     /**
@@ -44,8 +45,13 @@ class ServiceProvider extends IlluminateServiceProvider
          * The Registrator class, used by the InsideAuth facade
          */
         $this->app->singleton(Registrator::class, function (Application $app) {
-            return new Registrator();
+            return new Registrator($app);
         });
+    }
+
+    private function bindServices()
+    {
+        //$this->app->bind();
     }
 
     /**

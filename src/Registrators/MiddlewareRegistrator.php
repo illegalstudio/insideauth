@@ -2,8 +2,7 @@
 
 namespace Illegal\InsideAuth\Registrators;
 
-use Illegal\InsideAuth\Authenticator;
-use Illegal\InsideAuth\Contracts\RegistratorInterface;
+use Illegal\InsideAuth\Contracts\AbstractRegistrator;
 use Illegal\InsideAuth\Http\Middleware\Authenticate;
 use Illegal\InsideAuth\Http\Middleware\EnsureAuthIsEnabled;
 use Illegal\InsideAuth\Http\Middleware\EnsureEmailIsVerified;
@@ -29,7 +28,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
  * @property string $inject
  * @property string $redirect_authenticated
  */
-class MiddlewareRegistrator implements RegistratorInterface
+class MiddlewareRegistrator extends AbstractRegistrator
 {
     /**
      * The parameters collection, this will be merged inside the Authenticator, using the prefix
@@ -37,9 +36,22 @@ class MiddlewareRegistrator implements RegistratorInterface
     private Collection $parameters;
 
     /**
+     * @inheritdoc
+     */
+    protected string $prefix = 'middleware';
+
+    /**
      * @inheritDoc
      */
-    public function __construct(private readonly Authenticator $authenticator, string $prefix = 'middleware')
+    public function __get($key)
+    {
+        return $this->parameters->get($key);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function collectAndMergeParameters(): static
     {
         $this->parameters = collect([
             'verified'               => $this->authenticator->name() . '-verified',
@@ -59,15 +71,9 @@ class MiddlewareRegistrator implements RegistratorInterface
             'ensure_enabled',
             'inject',
             'redirect_authenticated'
-        ])->mapWithKeys(fn($value, $key) => [$prefix . '_' . $key => $value]));
-    }
+        ])->mapWithKeys(fn($value, $key) => [$this->prefix . '_' . $key => $value]));
 
-    /**
-     * @inheritDoc
-     */
-    public function __get($key)
-    {
-        return $this->parameters->get($key);
+        return $this;
     }
 
     /**

@@ -2,8 +2,7 @@
 
 namespace Illegal\InsideAuth\Registrators;
 
-use Illegal\InsideAuth\Authenticator;
-use Illegal\InsideAuth\Contracts\RegistratorInterface;
+use Illegal\InsideAuth\Contracts\AbstractRegistrator;
 use Illegal\InsideAuth\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
@@ -13,7 +12,7 @@ use Illuminate\Support\Facades\Config;
  * @property string $provider
  * @property string $password_broker
  */
-class SecurityRegistrator implements RegistratorInterface
+class SecurityRegistrator extends AbstractRegistrator
 {
     /**
      * The parameters collection, this will be merged inside the Authenticator, using the prefix
@@ -21,18 +20,9 @@ class SecurityRegistrator implements RegistratorInterface
     private Collection $parameters;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function __construct(private readonly Authenticator $authenticator, string $prefix = 'security')
-    {
-        $this->parameters = collect([
-            'guard'           => $this->authenticator->name(),
-            'provider'        => $this->authenticator->name(),
-            'password_broker' => $this->authenticator->name(),
-        ]);
-
-        $this->authenticator->merge($this->parameters->mapWithKeys(fn($value, $key) => [$prefix . '_' . $key => $value]));
-    }
+    protected string $prefix = 'security';
 
     /**
      * @inheritDoc
@@ -40,6 +30,22 @@ class SecurityRegistrator implements RegistratorInterface
     public function __get($key)
     {
         return $this->parameters->get($key);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function collectAndMergeParameters(): static
+    {
+        $this->parameters = collect([
+            'guard'           => $this->authenticator->name(),
+            'provider'        => $this->authenticator->name(),
+            'password_broker' => $this->authenticator->name(),
+        ]);
+
+        $this->authenticator->merge($this->parameters->mapWithKeys(fn($value, $key) => [$this->prefix . '_' . $key => $value]));
+
+        return $this;
     }
 
     /**

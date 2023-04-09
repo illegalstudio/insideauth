@@ -2,8 +2,7 @@
 
 namespace Illegal\InsideAuth\Registrators;
 
-use Illegal\InsideAuth\Authenticator;
-use Illegal\InsideAuth\Contracts\RegistratorInterface;
+use Illegal\InsideAuth\Contracts\AbstractRegistrator;
 use Illegal\InsideAuth\Http\Controllers\AuthenticatedSessionController;
 use Illegal\InsideAuth\Http\Controllers\ConfirmablePasswordController;
 use Illegal\InsideAuth\Http\Controllers\EmailVerificationNotificationController;
@@ -38,7 +37,7 @@ use Illuminate\Support\Facades\Route;
  * @property string $profile_update
  * @property string $profile_destroy
  */
-class RouteRegistrator implements RegistratorInterface
+class RouteRegistrator extends AbstractRegistrator
 {
     /**
      * The parameters collection, this will be merged inside the Authenticator, using the prefix
@@ -46,9 +45,22 @@ class RouteRegistrator implements RegistratorInterface
     private Collection $parameters;
 
     /**
+     * @inheritdoc
+     */
+    protected string $prefix = 'route';
+
+    /**
      * @inheritDoc
      */
-    public function __construct(private readonly Authenticator $authenticator, string $prefix = 'route')
+    public function __get(string $key): string
+    {
+        return $this->parameters->get($key);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function collectAndMergeParameters(): static
     {
         $this->parameters = collect([
             'login'               => $this->authenticator->name() . '.auth.login',
@@ -68,15 +80,9 @@ class RouteRegistrator implements RegistratorInterface
             'profile_destroy'     => $this->authenticator->name() . '.auth.profile.destroy'
         ]);
 
-        $this->authenticator->merge($this->parameters->mapWithKeys(fn($value, $key) => [$prefix . '_' . $key => $value]));
-    }
+        $this->authenticator->merge($this->parameters->mapWithKeys(fn($value, $key) => [$this->prefix . '_' . $key => $value]));
 
-    /**
-     * @inheritDoc
-     */
-    public function __get(string $key): string
-    {
-        return $this->parameters->get($key);
+        return $this;
     }
 
     /**

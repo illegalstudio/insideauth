@@ -4,7 +4,8 @@ namespace Illegal\InsideAuth\Registrators;
 
 use Exception;
 use Illegal\InsideAuth\Authenticator;
-use Illegal\InsideAuth\Contracts\RegistratorInterface;
+use Illegal\InsideAuth\Contracts\AbstractRegistrator;
+use Illuminate\Foundation\Application;
 
 /**
  * This class is the main class of the InsideAuth package.
@@ -42,6 +43,13 @@ final class Registrator
     private array $authenticators = [];
 
     /**
+     * @param Application $app The Laravel application instance
+     */
+    public function __construct(private readonly Application $app)
+    {
+    }
+
+    /**
      * Boot the components of the Auth set
      * @throws Exception
      */
@@ -63,9 +71,11 @@ final class Registrator
         $authenticator = new Authenticator($name);
 
         collect($this->registrators)
-            ->map(function ($registrator, $category) use ($authenticator) {
-                return new $registrator($authenticator, $category);
-            })->map(function (RegistratorInterface $registrator) {
+            ->map(function ($registrator) use ($authenticator) {
+                /** @var AbstractRegistrator $registrator */
+                $registrator = $this->app->make($registrator);
+                return $registrator->withAuthenticator($authenticator)->collectAndMergeParameters();
+            })->map(function (AbstractRegistrator $registrator) {
                 $registrator->boot();
             });
 
