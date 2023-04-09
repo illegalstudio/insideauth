@@ -1,101 +1,96 @@
 <?php
 
-use Illegal\InsideAuth\Authenticator;
 use Illegal\InsideAuth\Http\Middleware\Authenticate;
 use Illegal\InsideAuth\Http\Middleware\EnsureAuthIsEnabled;
 use Illegal\InsideAuth\Http\Middleware\EnsureEmailIsVerified;
 use Illegal\InsideAuth\Http\Middleware\InjectIntoApplication;
 use Illegal\InsideAuth\Http\Middleware\RedirectIfAuthenticated;
 use Illegal\InsideAuth\Registrators\MiddlewareRegistrator;
+use Illuminate\Config\Repository;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Routing\Router;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Route;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-beforeEach(function () {
-    /** @noinspection PhpDynamicFieldDeclarationInspection */
-    $authenticator = Mockery::mock(Authenticator::class);
-    /** @noinspection PhpParamsInspection */
-    $authenticator
-        ->shouldReceive('name')
-        ->andSet('parameters', collect([
-            'route_login'    => 'login',
-            'security_guard' => 'guard'
-        ]))
-        ->andReturn('auth');
+test('middleware registrators handles boot correctly', function ($authName) {
 
-    $authenticator->shouldReceive('merge')->withArgs(function ($args) {
+    $config                = Mockery::mock(Repository::class);
+    $router                = Mockery::mock(Router::class);
+    $middlewareRegistrator = ( new MiddlewareRegistrator($config, $router) )
+        ->withAuthName($authName);
 
-        expect($args)->toBeInstanceOf(Collection::class)
-            ->and($args->count())->toBe(4)
-            ->and($args->get('middleware_verified'))->toBe('auth-verified')
-            ->and($args->get('middleware_guest'))->toBe('auth-guest')
-            ->and($args->get('middleware_logged_in'))->toBe('auth-logged')
-            ->and($args->get('middleware_web'))->toBe('auth-web');
+    $parameters = $middlewareRegistrator->collectAndMergeParameters();
 
-        return true;
-    });
-    /** @noinspection PhpDynamicFieldDeclarationInspection */
-    $this->middlewareRegistrator = (new MiddlewareRegistrator())
-        ->withAuthenticator($authenticator)
-        ->collectAndMergeParameters();
-});
+    expect($parameters)->toBeInstanceOf(Collection::class)
+        ->and($parameters->toArray())->toMatchArray([
+            'middleware_verified'  => $authName . '-verified',
+            'middleware_guest'     => $authName . '-guest',
+            'middleware_logged_in' => $authName . '-logged',
+            'middleware_web'       => $authName . '-web'
+        ]);
 
-test('middleware registrators handles boot correctly', function () {
-    Route::shouldReceive('aliasMiddleware')->withArgs(function ($alias, $class) {
+    $router->shouldReceive('aliasMiddleware')->withArgs(function ($alias, $class) use ($authName) {
 
         expect($alias)->toBeIn([
-            'auth-authenticated',
-            'auth-ensure-email-is-verified',
-            'auth-ensure-auth-is-enabled',
-            'auth-redirect-if-authenticated',
-            'auth-inject'
+            $authName . '-authenticated',
+            $authName . '-ensure-email-is-verified',
+            $authName . '-ensure-auth-is-enabled',
+            $authName . '-redirect-if-authenticated',
+            $authName . '-inject'
         ])->and($class)
-            ->when($alias === "auth-authenticated", fn(Pest\Expectation $class) => $class->toBe(Authenticate::class))
-            ->when($alias === "auth-ensure-email-is-verified", fn(Pest\Expectation $class) => $class->toBe(EnsureEmailIsVerified::class))
-            ->when($alias === "auth-ensure-auth-is-enabled", fn(Pest\Expectation $class) => $class->toBe(EnsureAuthIsEnabled::class))
-            ->when($alias === "auth-redirect-if-authenticated", fn(Pest\Expectation $class) => $class->toBe(RedirectIfAuthenticated::class))
-            ->when($alias === "auth-inject", fn(Pest\Expectation $class) => $class->toBe(InjectIntoApplication::class));;
+            ->when($alias === $authName . "-authenticated", fn(Pest\Expectation $class) => $class->toBe(Authenticate::class))
+            ->when($alias === $authName . "-ensure-email-is-verified", fn(Pest\Expectation $class) => $class->toBe(EnsureEmailIsVerified::class))
+            ->when($alias === $authName . "-ensure-auth-is-enabled", fn(Pest\Expectation $class) => $class->toBe(EnsureAuthIsEnabled::class))
+            ->when($alias === $authName . "-redirect-if-authenticated", fn(Pest\Expectation $class) => $class->toBe(RedirectIfAuthenticated::class))
+            ->when($alias === $authName . "-inject", fn(Pest\Expectation $class) => $class->toBe(InjectIntoApplication::class));;
 
         return true;
     })->times(5);
 
-    Route::shouldReceive('middlewareGroup')->withArgs(function ($alias, array $data) {
-        expect($alias)->toBeIn([
-            'auth-web',
-            'auth-guest',
-            'auth-logged',
-            'auth-verified'
-        ])->and($data)
-            ->when($alias === "auth-web", fn($data) => $data->toMatchArray([
-                EncryptCookies::class,
-                AddQueuedCookiesToResponse::class,
-                StartSession::class,
-                ShareErrorsFromSession::class,
-                VerifyCsrfToken::class,
-                SubstituteBindings::class
-            ]))
-            ->when($alias === "auth-guest", fn(Pest\Expectation $data) => $data->toMatchArray([
-                'auth-inject:auth',
-                'auth-ensure-auth-is-enabled',
-                'auth-redirect-if-authenticated'
-            ]))
-            ->when($alias === "auth-logged", fn(Pest\Expectation $data) => $data->toMatchArray([
-                'auth-inject:auth',
-                'auth-ensure-auth-is-enabled',
-                'auth-authenticated:login,guard'
-            ]))
-            ->when($alias === "auth-verified", fn(Pest\Expectation $data) => $data->toMatchArray([
-                'auth-logged',
-                'auth-ensure-email-is-verified'
-            ]));
+    $router->shouldReceive('middlewareGroup')->withArgs([
+        $authName . '-web',
+        [
+            EncryptCookies::class,
+            AddQueuedCookiesToResponse::class,
+            StartSession::class,
+            ShareErrorsFromSession::class,
+            VerifyCsrfToken::class,
+            SubstituteBindings::class
+        ]
+    ]);
 
-        return true;
-    })->times(4);
+    $router->shouldReceive('middlewareGroup')->withArgs([
+        $authName . '-guest',
+        [
+            $authName . '-inject:' . $authName,
+            $authName . '-ensure-auth-is-enabled',
+            $authName . '-redirect-if-authenticated'
+        ]
+    ]);
 
-    $this->middlewareRegistrator->boot();
-});
+    $router->shouldReceive('middlewareGroup')->withArgs([
+        $authName . '-logged',
+        [
+            $authName . '-inject:' . $authName,
+            $authName . '-ensure-auth-is-enabled',
+            $authName . '-authenticated:login,guard'
+        ]
+    ]);
+
+    $router->shouldReceive('middlewareGroup')->withArgs([
+        $authName . '-verified',
+        [
+            $authName . '-logged',
+            $authName . '-ensure-email-is-verified'
+        ]
+    ]);
+
+    $middlewareRegistrator->boot(collect([
+        'route_login'    => 'login',
+        'security_guard' => 'guard'
+    ]));
+})->with(['auth', 'test_auth', 'test-auth']);

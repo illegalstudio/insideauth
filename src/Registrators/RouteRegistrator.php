@@ -18,7 +18,6 @@ use Illegal\InsideAuth\Http\Middleware\EnsureForgotPasswordIsEnabled;
 use Illegal\InsideAuth\Http\Middleware\EnsureRegistrationIsEnabled;
 use Illegal\InsideAuth\Http\Middleware\EnsureUserProfileIsEnabled;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Route;
 
 /**
  * @property string $login
@@ -60,41 +59,40 @@ class RouteRegistrator extends AbstractRegistrator
     /**
      * @inheritDoc
      */
-    public function collectAndMergeParameters(): static
+    public function collectAndMergeParameters(): Collection
     {
         $this->parameters = collect([
-            'login'               => $this->authenticator->name() . '.auth.login',
-            'register'            => $this->authenticator->name() . '.auth.register',
-            'password_request'    => $this->authenticator->name() . '.auth.password.request',
-            'password_email'      => $this->authenticator->name() . '.auth.password.email',
-            'password_reset'      => $this->authenticator->name() . '.auth.password.reset',
-            'password_store'      => $this->authenticator->name() . '.auth.password.store',
-            'logout'              => $this->authenticator->name() . '.auth.logout',
-            'verification_notice' => $this->authenticator->name() . '.auth.verification.notice',
-            'verification_verify' => $this->authenticator->name() . '.auth.verification.verify',
-            'verification_send'   => $this->authenticator->name() . '.auth.verification.send',
-            'password_confirm'    => $this->authenticator->name() . '.auth.password.confirm',
-            'password_update'     => $this->authenticator->name() . '.auth.password.update',
-            'profile_edit'        => $this->authenticator->name() . '.auth.profile.edit',
-            'profile_update'      => $this->authenticator->name() . '.auth.profile.update',
-            'profile_destroy'     => $this->authenticator->name() . '.auth.profile.destroy'
+            'login'               => $this->authName . '.auth.login',
+            'register'            => $this->authName . '.auth.register',
+            'password_request'    => $this->authName . '.auth.password.request',
+            'password_email'      => $this->authName . '.auth.password.email',
+            'password_reset'      => $this->authName . '.auth.password.reset',
+            'password_store'      => $this->authName . '.auth.password.store',
+            'logout'              => $this->authName . '.auth.logout',
+            'verification_notice' => $this->authName . '.auth.verification.notice',
+            'verification_verify' => $this->authName . '.auth.verification.verify',
+            'verification_send'   => $this->authName . '.auth.verification.send',
+            'password_confirm'    => $this->authName . '.auth.password.confirm',
+            'password_update'     => $this->authName . '.auth.password.update',
+            'profile_edit'        => $this->authName . '.auth.profile.edit',
+            'profile_update'      => $this->authName . '.auth.profile.update',
+            'profile_destroy'     => $this->authName . '.auth.profile.destroy'
         ]);
 
-        $this->authenticator->merge($this->parameters->mapWithKeys(fn($value, $key) => [$this->prefix . '_' . $key => $value]));
-
-        return $this;
+        return $this->parameters->mapWithKeys(fn($value, $key) => [$this->prefix . '_' . $key => $value]);
     }
 
     /**
      * @inheritDoc
      */
-    public function boot(): void
+    public function boot(Collection $allParameters): void
     {
-        Route::prefix($this->authenticator->name())->middleware($this->authenticator->middleware_web)->group(function () {
+        /** @noinspection PhpUndefinedMethodInspection */
+        $this->router->prefix($this->authName)->middleware($allParameters->get('middleware_web'))->group(function () use ($allParameters) {
             /**
              * Routes that are accessible to guests users
              */
-            Route::middleware($this->authenticator->middleware_guest)->group(function () {
+            $this->router->middleware($allParameters->get('middleware_guest'))->group(function () {
                 $this->registerLoginRoutes();
                 $this->registerRegisterRoutes();
                 $this->registerForgotPasswordRoutes();
@@ -103,7 +101,7 @@ class RouteRegistrator extends AbstractRegistrator
             /**
              * Routes that are accessible to logged in users, verified or not
              */
-            Route::middleware($this->authenticator->middleware_logged_in)->group(function () {
+            $this->router->middleware($allParameters->get('middleware_logged_in'))->group(function () {
                 $this->registerLogoutRoutes();
                 $this->registerEmailVerificationRoutes();
             });
@@ -111,7 +109,7 @@ class RouteRegistrator extends AbstractRegistrator
             /**
              * Routes that are accessible to logged in and verified users
              */
-            Route::middleware($this->authenticator->middleware_verified)->group(function () {
+            $this->router->middleware($allParameters->get('middleware_verified'))->group(function () {
                 $this->registerProfileRoutes();
             });
         });
@@ -122,8 +120,8 @@ class RouteRegistrator extends AbstractRegistrator
      */
     private function registerLoginRoutes(): void
     {
-        Route::get('login', [AuthenticatedSessionController::class, 'create'])->name($this->login);
-        Route::post('login', [AuthenticatedSessionController::class, 'store']);
+        $this->router->get('login', [AuthenticatedSessionController::class, 'create'])->name($this->login);
+        $this->router->post('login', [AuthenticatedSessionController::class, 'store']);
     }
 
     /**
@@ -131,9 +129,9 @@ class RouteRegistrator extends AbstractRegistrator
      */
     private function registerRegisterRoutes(): void
     {
-        Route::middleware(EnsureRegistrationIsEnabled::class)->group(function () {
-            Route::get('register', [RegisteredUserController::class, 'create'])->name($this->register);
-            Route::post('register', [RegisteredUserController::class, 'store']);
+        $this->router->middleware(EnsureRegistrationIsEnabled::class)->group(function () {
+            $this->router->get('register', [RegisteredUserController::class, 'create'])->name($this->register);
+            $this->router->post('register', [RegisteredUserController::class, 'store']);
         });
     }
 
@@ -142,12 +140,12 @@ class RouteRegistrator extends AbstractRegistrator
      */
     private function registerForgotPasswordRoutes(): void
     {
-        Route::middleware(EnsureForgotPasswordIsEnabled::class)->group(function () {
-            Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name($this->password_request);
-            Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])->name($this->password_email);
+        $this->router->middleware(EnsureForgotPasswordIsEnabled::class)->group(function () {
+            $this->router->get('forgot-password', [PasswordResetLinkController::class, 'create'])->name($this->password_request);
+            $this->router->post('forgot-password', [PasswordResetLinkController::class, 'store'])->name($this->password_email);
 
-            Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])->name($this->password_reset);
-            Route::post('reset-password', [NewPasswordController::class, 'store'])->name($this->password_store);
+            $this->router->get('reset-password/{token}', [NewPasswordController::class, 'create'])->name($this->password_reset);
+            $this->router->post('reset-password', [NewPasswordController::class, 'store'])->name($this->password_store);
         });
     }
 
@@ -156,7 +154,7 @@ class RouteRegistrator extends AbstractRegistrator
      */
     private function registerLogoutRoutes(): void
     {
-        Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name($this->logout);
+        $this->router->post('logout', [AuthenticatedSessionController::class, 'destroy'])->name($this->logout);
     }
 
     /**
@@ -164,20 +162,20 @@ class RouteRegistrator extends AbstractRegistrator
      */
     public function registerEmailVerificationRoutes(): void
     {
-        Route::middleware(EnsureEmailVerificationIsEnabled::class)->group(function () {
-            Route::get('verify-email', EmailVerificationPromptController::class)->name($this->verification_notice);
-            Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
+        $this->router->middleware(EnsureEmailVerificationIsEnabled::class)->group(function () {
+            $this->router->get('verify-email', EmailVerificationPromptController::class)->name($this->verification_notice);
+            $this->router->get('verify-email/{id}/{hash}', VerifyEmailController::class)
                 ->middleware(['signed', 'throttle:6,1'])
                 ->name($this->verification_verify);
 
-            Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+            $this->router->post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
                 ->middleware('throttle:6,1')
                 ->name($this->verification_send);
 
-            Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])->name($this->password_confirm);
-            Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
+            $this->router->get('confirm-password', [ConfirmablePasswordController::class, 'show'])->name($this->password_confirm);
+            $this->router->post('confirm-password', [ConfirmablePasswordController::class, 'store']);
 
-            Route::put('password', [PasswordController::class, 'update'])->name($this->password_update);
+            $this->router->put('password', [PasswordController::class, 'update'])->name($this->password_update);
         });
     }
 
@@ -186,10 +184,10 @@ class RouteRegistrator extends AbstractRegistrator
      */
     public function registerProfileRoutes(): void
     {
-        Route::middleware(EnsureUserProfileIsEnabled::class)->group(function () {
-            Route::get('/profile', [ProfileController::class, 'edit'])->name($this->profile_edit);
-            Route::patch('/profile', [ProfileController::class, 'update'])->name($this->profile_update);
-            Route::delete('/profile', [ProfileController::class, 'destroy'])->name($this->profile_destroy);
+        $this->router->middleware(EnsureUserProfileIsEnabled::class)->group(function () {
+            $this->router->get('/profile', [ProfileController::class, 'edit'])->name($this->profile_edit);
+            $this->router->patch('/profile', [ProfileController::class, 'update'])->name($this->profile_update);
+            $this->router->delete('/profile', [ProfileController::class, 'destroy'])->name($this->profile_destroy);
         });
     }
 }

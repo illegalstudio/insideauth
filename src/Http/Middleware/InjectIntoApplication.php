@@ -3,8 +3,8 @@
 namespace Illegal\InsideAuth\Http\Middleware;
 
 use Closure;
+use Illegal\InsideAuth\Builder;
 use Illegal\InsideAuth\InsideAuth;
-use Illegal\InsideAuth\Registrators\Registrator;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
  * This class will inject the current authenticator into:
  * - The request
  * - The current property of the Registrator / InsideAuth facade
- * @see Registrator::current()
+ * @see Builder::current()
  * @see InsideAuth::current()
  */
 class InjectIntoApplication

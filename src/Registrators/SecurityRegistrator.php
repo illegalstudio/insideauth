@@ -4,8 +4,9 @@ namespace Illegal\InsideAuth\Registrators;
 
 use Illegal\InsideAuth\Contracts\AbstractRegistrator;
 use Illegal\InsideAuth\Models\User;
+use Illuminate\Config\Repository;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Config;
 
 /**
  * @property string $guard
@@ -25,6 +26,17 @@ class SecurityRegistrator extends AbstractRegistrator
     protected string $prefix = 'security';
 
     /**
+     * The database prefix to use for the tables
+     */
+    protected string $dbPrefix;
+
+    public function __construct(Repository $config, Router $router, string $dbPrefix = "")
+    {
+        $this->dbPrefix = $dbPrefix;
+        parent::__construct($config, $router);
+    }
+
+    /**
      * @inheritDoc
      */
     public function __get($key)
@@ -35,28 +47,26 @@ class SecurityRegistrator extends AbstractRegistrator
     /**
      * @inheritDoc
      */
-    public function collectAndMergeParameters(): static
+    public function collectAndMergeParameters(): Collection
     {
         $this->parameters = collect([
-            'guard'           => $this->authenticator->name(),
-            'provider'        => $this->authenticator->name(),
-            'password_broker' => $this->authenticator->name(),
+            'guard'           => $this->authName,
+            'provider'        => $this->authName,
+            'password_broker' => $this->authName,
         ]);
 
-        $this->authenticator->merge($this->parameters->mapWithKeys(fn($value, $key) => [$this->prefix . '_' . $key => $value]));
-
-        return $this;
+        return $this->parameters->mapWithKeys(fn($value, $key) => [$this->prefix . '_' . $key => $value]);
     }
 
     /**
      * @inheritDoc
      */
-    public function boot(): void
+    public function boot(Collection $allParameters): void
     {
         /**
          * Configure the guard
          */
-        Config::set('auth.guards.' . $this->guard, [
+        $this->config->set('auth.guards.' . $this->guard, [
             'driver'   => 'session',
             'provider' => $this->provider
         ]);
@@ -64,7 +74,7 @@ class SecurityRegistrator extends AbstractRegistrator
         /**
          * Configure the provider
          */
-        Config::set('auth.providers.' . $this->provider, [
+        $this->config->set('auth.providers.' . $this->provider, [
             'driver' => 'eloquent',
             'model'  => User::class
         ]);
@@ -72,9 +82,9 @@ class SecurityRegistrator extends AbstractRegistrator
         /**
          * Configure the password broker
          */
-        Config::set('auth.passwords.' . $this->password_broker, [
+        $this->config->set('auth.passwords.' . $this->password_broker, [
             'provider' => $this->provider,
-            'table'    => config('inside_auth.db.prefix') . 'password_resets',
+            'table'    => $this->dbPrefix . 'password_resets',
             'expire'   => 60,
             'throttle' => 60,
         ]);

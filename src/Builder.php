@@ -1,10 +1,12 @@
 <?php
 
-namespace Illegal\InsideAuth\Registrators;
+namespace Illegal\InsideAuth;
 
 use Exception;
-use Illegal\InsideAuth\Authenticator;
 use Illegal\InsideAuth\Contracts\AbstractRegistrator;
+use Illegal\InsideAuth\Registrators\MiddlewareRegistrator;
+use Illegal\InsideAuth\Registrators\RouteRegistrator;
+use Illegal\InsideAuth\Registrators\SecurityRegistrator;
 use Illuminate\Foundation\Application;
 
 /**
@@ -18,7 +20,7 @@ use Illuminate\Foundation\Application;
  * @see SecurityRegistrator
  *
  */
-final class Registrator
+final class Builder
 {
     /**
      * This variable carries the authenticator for the current request.
@@ -72,11 +74,29 @@ final class Registrator
 
         collect($this->registrators)
             ->map(function ($registrator) use ($authenticator) {
-                /** @var AbstractRegistrator $registrator */
+
+                /**
+                 * Build the registrator.
+                 *
+                 * @var AbstractRegistrator $registrator
+                 */
                 $registrator = $this->app->make($registrator);
-                return $registrator->withAuthenticator($authenticator)->collectAndMergeParameters();
-            })->map(function (AbstractRegistrator $registrator) {
-                $registrator->boot();
+                $registrator->withAuthName($authenticator->name());
+
+                /**
+                 * Merge all parameters from the registrator into the authenticator
+                 */
+                $authenticator->merge(
+                    $registrator->collectAndMergeParameters()
+                );
+
+                return $registrator;
+            })->map(function (AbstractRegistrator $registrator) use ($authenticator) {
+
+                /**
+                 * Boot the registrator
+                 */
+                $registrator->boot($authenticator->parameters);
             });
 
         /**
