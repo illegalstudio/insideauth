@@ -6,6 +6,15 @@ use Illegal\InsideAuth\Tests\FeatureHelpers\Contracts\Helper;
 
 final class Exposes extends Helper
 {
+    /**
+     * The dummy homepage - defined in the test suite - should be available
+     */
+    public function homepage(): void
+    {
+        $this->testCase()->get(route('homepage'))
+            ->assertOk()
+            ->assertSee('This is a dummy home');
+    }
 
     /**
      * The dummy dashboard - defined in the test suite - should be available

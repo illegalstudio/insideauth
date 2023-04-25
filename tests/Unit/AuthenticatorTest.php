@@ -17,7 +17,7 @@ test('Parameters are a Collection', function () {
 });
 
 test('Expect the correct number of parameters', function () {
-    expect($this->authenticator->parameters->count())->toBe(13);
+    expect($this->authenticator->parameters->count())->toBe(14);
 });
 
 test('The authenticator defaults are correct', function () {
@@ -27,6 +27,7 @@ test('The authenticator defaults are correct', function () {
         ->and($this->authenticator->email_verification_enabled)->toBeTrue()
         ->and($this->authenticator->user_profile_enabled)->toBeTrue()
         ->and($this->authenticator->dashboard)->toBeNull()
+        ->and($this->authenticator->homepage)->toBeNull()
         ->and($this->authenticator->template_confirm_password)->toBe('inside_auth::auth.confirm-password')
         ->and($this->authenticator->template_forgot_password)->toBe('inside_auth::auth.forgot-password')
         ->and($this->authenticator->template_login)->toBe('inside_auth::auth.login')
@@ -84,6 +85,12 @@ test('The dashboard can be set', function () {
     expect()
         ->and($this->authenticator->withDashboard('dashboard'))->toBe($this->authenticator)
         ->and($this->authenticator->dashboard)->toBe('dashboard');
+});
+
+test('The homepage can be set', function() {
+    expect()
+        ->and($this->authenticator->withHomepage('homepage'))->toBe($this->authenticator)
+        ->and($this->authenticator->homepage)->toBe('homepage');
 });
 
 test('The confirm password template can be set', function () {

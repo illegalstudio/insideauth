@@ -15,6 +15,7 @@ beforeEach(
 );
 
 it('routes to dashboard', fn() => $this->routes->toDashboard());
+it('routes to homepage', fn() => $this->routes->toHomepage());
 it('routes to login', fn() => $this->routes->toLogin());
 it('routes to logout', fn() => $this->routes->toLogout());
 it('routes to register', fn() => $this->routes->toRegister());
@@ -34,20 +35,21 @@ it('routes to verification verify', fn() => $this->routes->toVerificationVerify(
 /**
  * Check that the login, register are available
  */
-it('exposes login',             fn() => $this->exposes->login());
-it('exposes register',          fn() => $this->exposes->register());
+it('exposes homepage', fn() => $this->exposes->homepage());
+it('exposes login', fn() => $this->exposes->login());
+it('exposes register', fn() => $this->exposes->register());
 
 /**
  * Hides forgot and reset password
  */
-it('hides forgot password',   fn() => $this->hides->forgotPassword());
-it('hides reset password',    fn() => $this->hides->resetPassword());
+it('hides forgot password', fn() => $this->hides->forgotPassword());
+it('hides reset password', fn() => $this->hides->resetPassword());
 
 /**
  * Has the correct links in the various views
  */
-it('has register in login',         fn() => $this->has->registerInLogin());
-it('has login in register',         fn() => $this->has->loginInRegister());
+it('has register in login', fn() => $this->has->registerInLogin());
+it('has login in register', fn() => $this->has->loginInRegister());
 
 /**
  * Hasn't the link to forgot password in the login
@@ -58,7 +60,7 @@ it('has not password request in login', fn() => $this->hasNot->passwordRequestIn
 /**
  * Correcly redirects to login protected routes
  */
-it('redirects dashboard to login',              fn() => $this->redirects->dashboardToLogin());
-it('redirects verification notice to login',    fn() => $this->redirects->verificatioNoticeToLogin());
-it('redirects verification verify to login',    fn() => $this->redirects->verificationVerifyToLogin());
-it('redirects profile to login',                fn() => $this->redirects->profileToLogin());
+it('redirects dashboard to login', fn() => $this->redirects->dashboardToLogin());
+it('redirects verification notice to login', fn() => $this->redirects->verificatioNoticeToLogin());
+it('redirects verification verify to login', fn() => $this->redirects->verificationVerifyToLogin());
+it('redirects profile to login', fn() => $this->redirects->profileToLogin());

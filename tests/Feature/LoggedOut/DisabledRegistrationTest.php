@@ -15,6 +15,7 @@ beforeEach(
 );
 
 it('routes to dashboard', fn() => $this->routes->toDashboard());
+it('routes to homepage', fn() => $this->routes->toHomepage());
 it('routes to login', fn() => $this->routes->toLogin());
 it('routes to logout', fn() => $this->routes->toLogout());
 it('routes to register', fn() => $this->routes->toRegister());
@@ -34,6 +35,7 @@ it('routes to verification verify', fn() => $this->routes->toVerificationVerify(
 /**
  * Check that the login, forgot password and reset password are available
  */
+it('exposes homepage', fn() => $this->exposes->homepage());
 it('exposes login', fn() => $this->exposes->login());
 it('exposes forgot password', fn() => $this->exposes->forgotPassword());
 it('exposes reset password', fn() => $this->exposes->resetPassword());

@@ -7,6 +7,16 @@ use Illegal\InsideAuth\Tests\FeatureHelpers\Contracts\Helper;
 final class Routes extends Helper
 {
     /**
+     * The route to the dummy homepage is correct
+     */
+    public function toHomepage(): void
+    {
+        expect(
+            route('homepage', [], false)
+        )->toBe('/homepage');
+    }
+
+    /**
      * The route to the dummy dashboard is correct
      */
     public function toDashboard(): void
