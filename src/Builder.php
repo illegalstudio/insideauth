@@ -55,7 +55,7 @@ final class Builder
      * Boot the components of the Auth set
      * @throws Exception
      */
-    public function boot(string $name): Authenticator
+    public function boot(string $name = 'auth'): Authenticator
     {
 
         /**
@@ -132,6 +132,10 @@ final class Builder
         return $this->current;
     }
 
+    /**
+     * Returns true if the current authenticator is set.
+     * It means that the current request passed through the InjectIntoApplication middleware.
+     */
     public function booted(): bool
     {
         return filled($this->current);

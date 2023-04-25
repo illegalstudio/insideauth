@@ -2,6 +2,15 @@
 
 - Support for themes
 
+# 0.2.12
+
+**Release date**: 2021-04-25
+
+- Added `homepage` parameter. The user will be redirect here after logout or delete account.
+- Fixed some missing return types.
+- The boot method can be called without name parameter, in this case the default name `auth` will be used.
+- Added testing using pestphp.
+
 # 0.2.11
 
 **Release date**: 2021-04-02
