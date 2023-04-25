@@ -14,7 +14,8 @@ use Illuminate\Support\Collection;
  * @property bool $forgot_password_enabled Whether forgot password is enabled
  * @property bool $email_verification_enabled Whether email verification is enabled
  * @property bool $user_profile_enabled Whether the user profile is enabled
- * @property string $dashboard The name of the dashboard route
+ * @property string $dashboard The name of the dashboard route - redirect here after login
+ * @property string $homepage THe name of the homepage route - redirect here after logout
  * @property string $template_confirm_password The name of the confirm password template
  * @property string $template_forgot_password The name of the forgot password template
  * @property string $template_login The name of the login template
@@ -72,6 +73,7 @@ class Authenticator
             'email_verification_enabled' => true,
             'user_profile_enabled'       => true,
             'dashboard'                  => null,
+            'homepage'                   => null,
             'template_confirm_password'  => 'inside_auth::auth.confirm-password',
             'template_forgot_password'   => 'inside_auth::auth.forgot-password',
             'template_login'             => 'inside_auth::auth.login',
@@ -184,6 +186,14 @@ class Authenticator
     public function withDashboard(string $dashboard): static
     {
         return $this->set('dashboard', $dashboard);
+    }
+
+    /**
+     * Set the homepage route
+     */
+    public function withHomepage(string $homepage): static
+    {
+        return $this->set('homepage', $homepage);
     }
 
     /**
