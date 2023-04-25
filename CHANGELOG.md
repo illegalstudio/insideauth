@@ -2,6 +2,13 @@
 
 - Support for themes
 
+# 0.2.12
+
+**Release date**: 2021-04-25
+
+- Added `homepage` parameter. The user will be redirect here after logout or delete account.
+- Fixed some missing return types.
+
 # 0.2.11
 
 **Release date**: 2021-04-02
