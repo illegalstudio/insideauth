@@ -12,7 +12,7 @@ class ServiceProvider extends IlluminateServiceProvider
     /**
      * Register any application services.
      */
-    public function register()
+    public function register(): void
     {
         $this->registerSingletons();
     }
@@ -31,7 +31,7 @@ class ServiceProvider extends IlluminateServiceProvider
     /**
      * Register the singletons
      */
-    private function registerSingletons()
+    private function registerSingletons(): void
     {
         /**
          * The PasswordBroker manager
