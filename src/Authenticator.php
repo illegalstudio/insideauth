@@ -64,9 +64,11 @@ class Authenticator
      *
      * @param string $name The name of the auth
      */
-    public function __construct(private readonly string $name)
+    public function __construct(private readonly string $name, Collection $parameters = null)
     {
-        $this->parameters = Collection::make([
+        $parameters = $parameters ?? new Collection();
+
+        $this->parameters = $parameters->merge([
             'enabled'                    => true,
             'registration_enabled'       => true,
             'forgot_password_enabled'    => true,

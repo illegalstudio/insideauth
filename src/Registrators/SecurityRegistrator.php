@@ -2,18 +2,18 @@
 
 namespace Illegal\InsideAuth\Registrators;
 
-use Illegal\InsideAuth\Authenticator;
-use Illegal\InsideAuth\Contracts\RegistratorInterface;
+use Illegal\InsideAuth\Contracts\AbstractRegistrator;
 use Illegal\InsideAuth\Models\User;
+use Illuminate\Config\Repository;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Config;
 
 /**
  * @property string $guard
  * @property string $provider
  * @property string $password_broker
  */
-class SecurityRegistrator implements RegistratorInterface
+class SecurityRegistrator extends AbstractRegistrator
 {
     /**
      * The parameters collection, this will be merged inside the Authenticator, using the prefix
@@ -21,17 +21,19 @@ class SecurityRegistrator implements RegistratorInterface
     private Collection $parameters;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function __construct(private readonly Authenticator $authenticator, string $prefix = 'security')
-    {
-        $this->parameters = collect([
-            'guard'           => $this->authenticator->name(),
-            'provider'        => $this->authenticator->name(),
-            'password_broker' => $this->authenticator->name(),
-        ]);
+    protected string $prefix = 'security';
 
-        $this->authenticator->merge($this->parameters->mapWithKeys(fn($value, $key) => [$prefix . '_' . $key => $value]));
+    /**
+     * The database prefix to use for the tables
+     */
+    protected string $dbPrefix;
+
+    public function __construct(Repository $config, Router $router, string $dbPrefix = "")
+    {
+        $this->dbPrefix = $dbPrefix;
+        parent::__construct($config, $router);
     }
 
     /**
@@ -45,12 +47,26 @@ class SecurityRegistrator implements RegistratorInterface
     /**
      * @inheritDoc
      */
-    public function boot(): void
+    public function collectAndMergeParameters(): Collection
+    {
+        $this->parameters = collect([
+            'guard'           => $this->authName,
+            'provider'        => $this->authName,
+            'password_broker' => $this->authName,
+        ]);
+
+        return $this->parameters->mapWithKeys(fn($value, $key) => [$this->prefix . '_' . $key => $value]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function boot(Collection $allParameters): void
     {
         /**
          * Configure the guard
          */
-        Config::set('auth.guards.' . $this->guard, [
+        $this->config->set('auth.guards.' . $this->guard, [
             'driver'   => 'session',
             'provider' => $this->provider
         ]);
@@ -58,7 +74,7 @@ class SecurityRegistrator implements RegistratorInterface
         /**
          * Configure the provider
          */
-        Config::set('auth.providers.' . $this->provider, [
+        $this->config->set('auth.providers.' . $this->provider, [
             'driver' => 'eloquent',
             'model'  => User::class
         ]);
@@ -66,9 +82,9 @@ class SecurityRegistrator implements RegistratorInterface
         /**
          * Configure the password broker
          */
-        Config::set('auth.passwords.' . $this->password_broker, [
+        $this->config->set('auth.passwords.' . $this->password_broker, [
             'provider' => $this->provider,
-            'table'    => config('inside_auth.db.prefix') . 'password_resets',
+            'table'    => $this->dbPrefix . 'password_resets',
             'expire'   => 60,
             'throttle' => 60,
         ]);

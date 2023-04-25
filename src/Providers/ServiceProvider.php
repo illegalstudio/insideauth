@@ -2,8 +2,11 @@
 
 namespace Illegal\InsideAuth\Providers;
 
+use Illegal\InsideAuth\Builder;
 use Illegal\InsideAuth\Passwords\PasswordBrokerManager;
-use Illegal\InsideAuth\Registrators\Registrator;
+use Illegal\InsideAuth\Registrators\MiddlewareRegistrator;
+use Illegal\InsideAuth\Registrators\RouteRegistrator;
+use Illegal\InsideAuth\Registrators\SecurityRegistrator;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
@@ -15,6 +18,7 @@ class ServiceProvider extends IlluminateServiceProvider
     public function register(): void
     {
         $this->registerSingletons();
+        $this->bindServices();
     }
 
     /**
@@ -43,8 +47,26 @@ class ServiceProvider extends IlluminateServiceProvider
         /**
          * The Registrator class, used by the InsideAuth facade
          */
-        $this->app->singleton(Registrator::class, function (Application $app) {
-            return new Registrator();
+        $this->app->singleton(Builder::class, function (Application $app) {
+            return new Builder($app);
+        });
+    }
+
+    /**
+     * Bind the services to the DI
+     */
+    private function bindServices(): void
+    {
+        $this->app->bind(MiddlewareRegistrator::class, function(Application $app) {
+            return new MiddlewareRegistrator($app->make('config'), $app->make('router'));
+        });
+
+        $this->app->bind(RouteRegistrator::class, function(Application $app) {
+            return new RouteRegistrator($app->make('config'), $app->make('router'));
+        });
+
+        $this->app->bind(SecurityRegistrator::class, function(Application $app) {
+            return new SecurityRegistrator($app->make('config'), $app->make('router'), config('inside_auth.db.prefix'));
         });
     }
 

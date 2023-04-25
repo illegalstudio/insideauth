@@ -2,16 +2,15 @@
 
 namespace Illegal\InsideAuth;
 
-use Illegal\InsideAuth\Registrators\Registrator;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @mixin Registrator
+ * @mixin Builder
  */
 class InsideAuth extends Facade
 {
     public static function getFacadeAccessor(): string
     {
-        return Registrator::class;
+        return Builder::class;
     }
 }

@@ -1,0 +1,22 @@
+name: Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  package-tests:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+        with:
+          php-version: '8.1'
+      - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: composer update && composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist && composer dump-autoload
+      - name: Execute tests (Unit and Feature tests) via PEST
+        run: vendor/bin/pest
