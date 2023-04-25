@@ -48,6 +48,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect(
+            InsideAuth::current()->homepage ? route(InsideAuth::current()->homepage) : '/'
+        );
     }
 }
