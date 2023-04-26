@@ -110,7 +110,7 @@ final class Builder
     /**
      * Get the authenticator by name
      */
-    public function getAuthenticator(string $name): Authenticator
+    public function getAuthenticator(string $name = 'auth'): Authenticator
     {
         return $this->authenticators[$name] ?? abort(500, 'Authenticator not found');
     }

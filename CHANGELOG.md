@@ -2,6 +2,12 @@
 
 - Support for themes
 
+# 0.2.13
+
+**Release date**: Unreleased yet
+
+- The getAuthenticator method can be called without name parameter, in this case the default name `auth` will be used.
+
 # 0.2.12
 
 **Release date**: 2021-04-25
