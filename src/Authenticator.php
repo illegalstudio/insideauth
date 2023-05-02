@@ -46,7 +46,7 @@ use Illuminate\Support\Collection;
  * @property string $middleware_guest The name of the guest middleware
  * @property string $middleware_logged_in The name of the logged in middleware
  * @property string $middleware_web The name of the web middleware
- * @property string $middleware_classes The list of middleware classes used to authenticate
+ * @property array $middleware_classes The list of middleware classes used to authenticate
  *
  * Params that are registered by SecurityRegistrator:
  * @property string $security_guard The name of the guard
