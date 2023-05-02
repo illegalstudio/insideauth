@@ -53,15 +53,22 @@ class MiddlewareRegistrator extends AbstractRegistrator
     public function collectAndMergeParameters(): Collection
     {
         $this->parameters = collect([
-            'verified'               => $this->authName . '-verified',
-            'guest'                  => $this->authName . '-guest',
-            'logged_in'              => $this->authName . '-logged',
-            'web'                    => $this->authName . '-web',
-            'authenticated'          => $this->authName . '-authenticated',
-            'ensure_verified'        => $this->authName . '-ensure-email-is-verified',
-            'ensure_enabled'         => $this->authName . '-ensure-auth-is-enabled',
-            'inject'                 => $this->authName . '-inject',
-            'redirect_authenticated' => $this->authName . '-redirect-if-authenticated',
+            'verified'               => $this->authName.'-verified',
+            'guest'                  => $this->authName.'-guest',
+            'logged_in'              => $this->authName.'-logged',
+            'web'                    => $this->authName.'-web',
+            'authenticated'          => $this->authName.'-authenticated',
+            'ensure_verified'        => $this->authName.'-ensure-email-is-verified',
+            'ensure_enabled'         => $this->authName.'-ensure-auth-is-enabled',
+            'inject'                 => $this->authName.'-inject',
+            'redirect_authenticated' => $this->authName.'-redirect-if-authenticated',
+            'classes'                => [
+                Authenticate::class,
+                EnsureEmailIsVerified::class,
+                EnsureAuthIsEnabled::class,
+                RedirectIfAuthenticated::class,
+                InjectIntoApplication::class,
+            ]
         ]);
 
         return $this->parameters->except([
@@ -70,7 +77,7 @@ class MiddlewareRegistrator extends AbstractRegistrator
             'ensure_enabled',
             'inject',
             'redirect_authenticated'
-        ])->mapWithKeys(fn($value, $key) => [$this->prefix . '_' . $key => $value]);
+        ])->mapWithKeys(fn($value, $key) => [$this->prefix.'_'.$key => $value]);
     }
 
     /**
@@ -107,7 +114,7 @@ class MiddlewareRegistrator extends AbstractRegistrator
          * The guest middleware. Authenticated users will be redirected.
          */
         $this->router->middlewareGroup($this->guest, [
-            $this->inject . ':' . $this->authName,
+            $this->inject.':'.$this->authName,
             $this->ensure_enabled,
             $this->redirect_authenticated
         ]);
@@ -117,9 +124,9 @@ class MiddlewareRegistrator extends AbstractRegistrator
          * It's not necessary that the user is also verified.
          */
         $this->router->middlewareGroup($this->logged_in, [
-            $this->inject . ':' . $this->authName,
+            $this->inject.':'.$this->authName,
             $this->ensure_enabled,
-            $this->authenticated . ':' . $allParameters->get('route_login') . ',' . $allParameters->get('security_guard')
+            $this->authenticated.':'.$allParameters->get('route_login').','.$allParameters->get('security_guard')
         ]);
 
         /**
