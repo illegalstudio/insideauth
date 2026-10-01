@@ -1,8 +1,40 @@
-# Laravel InsideAuth
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.png">
+    <img src="assets/logo-transparent.png" alt="InsideAuth logo" width="130">
+  </picture>
+</p>
 
-_THIS REPOSITORY IS UNDER ACTIVE DEVELOPMENT AND IS NOT READY FOR PRODUCTION USE._
+<h1 align="center">Laravel InsideAuth</h1>
 
-Laravel InsideAuth is a seamless side authentication solution for Laravel packages. It provides an easy and independent authentication mechanism, allowing developers to focus on building core features of their packages or applications without worrying about managing separate authentication systems.
+<p align="center">
+  <em>Independent authentication for Laravel packages.</em>
+</p>
+
+<p align="center">
+  <a href="https://github.com/illegalstudio/insideauth/stargazers"><img src="https://img.shields.io/github/stars/illegalstudio/insideauth?style=flat-square&amp;logo=github&amp;logoColor=white&amp;label=stars&amp;color=FF3B25" alt="GitHub stars"></a>
+  <a href="https://packagist.org/packages/illegal/insideauth"><img src="https://img.shields.io/packagist/v/illegal/insideauth?style=flat-square&amp;logo=packagist&amp;logoColor=white&amp;label=version&amp;color=FF3B25" alt="Packagist version"></a>
+  <a href="https://packagist.org/packages/illegal/insideauth"><img src="https://img.shields.io/packagist/dt/illegal/insideauth?style=flat-square&amp;logo=packagist&amp;logoColor=white&amp;label=downloads&amp;color=FF3B25" alt="Packagist downloads"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/illegalstudio/insideauth?style=flat-square&amp;color=FF3B25" alt="License: MIT"></a>
+</p>
+
+<p align="center">
+  <strong>Isolated auth sets &middot; Customizable flows &middot; Middleware support</strong>
+</p>
+
+<p align="center">
+  InsideAuth gives your Laravel packages their own authentication system, with configurable login, registration, password reset, and email verification flows. Keep package authentication separate from your application's main authentication and focus on building your features.
+</p>
+
+<p align="center">
+  <a href="https://opensource.nahi.me"><strong>opensource.nahi.me</strong></a>
+</p>
+
+<p align="center">
+  <em>THIS REPOSITORY IS UNDER ACTIVE DEVELOPMENT AND IS NOT READY FOR PRODUCTION USE.</em>
+</p>
+
+---
 
 Features
 1. **Easy Integration**: Quickly integrate InsideAuth into your existing Laravel packages or applications with just a few lines of code.
